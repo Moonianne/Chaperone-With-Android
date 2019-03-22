@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import org.pursuit.school_trip_assistant.model.Student;
 
+import java.util.LinkedList;
+
 public final class StudentDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "STUDENT_DATABASE.db";
     private static final String TABLE_NAME = "Students";
@@ -50,5 +52,23 @@ public final class StudentDatabase extends SQLiteOpenHelper {
         }
         cursor.close();
         return false;
+    }
+
+    public LinkedList<Student> getStudentList() {
+        LinkedList<Student> studentList = new LinkedList<>();
+        Cursor cursor = getReadableDatabase().rawQuery(
+                "SELECT * FROM " + TABLE_NAME + ";", null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Student student = new Student(
+                            cursor.getString(cursor.getColumnIndex("first_name")),
+                            cursor.getString(cursor.getColumnIndex("last_name")),
+                            cursor.getString(cursor.getColumnIndex("emergency_number")));
+                    studentList.add(student);
+                } while (cursor.moveToNext());
+            }
+        }
+        return studentList;
     }
 }
