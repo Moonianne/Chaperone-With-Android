@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 
 import org.pursuit.school_trip_assistant.R;
 
@@ -34,15 +34,17 @@ public final class InputStudentFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button button = view.findViewById(R.id.photo_button);
-        button.setOnClickListener(v -> takePhoto());
+        ImageView imageView = view.findViewById(R.id.image_student);
+        imageView.setOnClickListener(v -> takePhoto());
     }
 
     private void takePhoto() {
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, CameraFragment.newInstance())
-                .addToBackStack(null)
-                .commit();
+        if (getFragmentManager() != null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, CameraFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 }

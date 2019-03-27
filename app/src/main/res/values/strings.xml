@@ -9,4 +9,9 @@
     <string name="intro_message">Intro Message</string>
     <string name="picture">Take Photo</string>
     <string name="description_info">Image Button</string>
+    <string name="add_student_portrait_here">add student portrait here</string>
+    <string name="emergency_number_field">Emergency Contact Number</string>
+    <string name="save_student">Save Student</string>
+    <string name="last_name_field">Last Name</string>
+    <string name="first_name_field">First Name</string>
 </resources>
