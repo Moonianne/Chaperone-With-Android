@@ -1,4 +1,4 @@
-package org.pursuit.school_trip_assistant.view.fragment;
+package org.pursuit.school_trip_assistant.view.fragment.camera;
 
 import android.content.Context;
 import android.util.AttributeSet;
