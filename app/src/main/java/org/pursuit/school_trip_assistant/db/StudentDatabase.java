@@ -39,7 +39,7 @@ public final class StudentDatabase extends SQLiteOpenHelper {
         //No-Op
     }
 
-    public boolean addStudent(Student student) {
+    public void addStudent(Student student) {
         Cursor cursor = getReadableDatabase().rawQuery(
                 "SELECT * FROM " + TABLE_NAME + " WHERE last_name = '" + student.lastName + "' AND first_name = '" + student.firstName + "';", null);
         if (cursor.getCount() == 0) {
@@ -48,10 +48,23 @@ public final class StudentDatabase extends SQLiteOpenHelper {
                     student.firstName + "', '" +
                     student.ePhoneNumber + "');");
             cursor.close();
-            return true;
         }
         cursor.close();
-        return false;
+    }
+
+    public Student getStudent(String lastName, String firstName) {
+        Student student = null;
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT image_url FROM " + TABLE_NAME +
+                " WHERE last_name = '" + lastName +
+                "' AND first_name = '" + firstName + "'; ", null);
+
+        if (cursor != null) {
+            student = new Student(
+                    cursor.getString(cursor.getColumnIndex("first_name")),
+                    cursor.getString(cursor.getColumnIndex("last_name")),
+                    cursor.getString(cursor.getColumnIndex("emergency_number")));
+        }
+        return student;
     }
 
     public LinkedList<Student> getStudentList() {
