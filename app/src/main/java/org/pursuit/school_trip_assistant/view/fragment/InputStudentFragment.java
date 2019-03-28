@@ -34,9 +34,6 @@ public final class InputStudentFragment extends Fragment {
     private EditText editContact;
     private Disposable disposable;
 
-    public InputStudentFragment() {
-    }
-
     public static InputStudentFragment newInstance() {
         return new InputStudentFragment();
     }
