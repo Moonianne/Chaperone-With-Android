@@ -91,6 +91,10 @@ public final class InputStudentFragment extends Fragment {
                 editContact.getText().toString());
     }
 
+    private void addStudentToDatabase(Student student) {
+        onFragmentInteractionListener.addStudentToDatabase(student, this);
+    }
+
     private void takePhoto() {
         if (getFragmentManager() != null) {
             getFragmentManager()
@@ -99,9 +103,5 @@ public final class InputStudentFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         }
-    }
-
-    private void addStudentToDatabase(Student student) {
-        onFragmentInteractionListener.addStudentToDatabase(student, this);
     }
 }

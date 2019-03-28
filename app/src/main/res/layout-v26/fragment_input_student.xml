@@ -4,16 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="64dp"
-    android:layout_marginVertical="100dp"
     android:background="@android:color/white"
-    tools:context=".view.fragment.InputStudentFragment">
+    tools:context=".view.fragment.InputStudentFragment"
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/image_student"
-        android:layout_width="match_parent"
-        android:layout_height="144dp"
-        android:layout_marginHorizontal="48dp"
+        android:layout_width="192dp"
+        android:layout_height="192dp"
         android:background="@android:color/darker_gray"
         android:clickable="true"
         android:contentDescription="@string/add_student_portrait_here"
