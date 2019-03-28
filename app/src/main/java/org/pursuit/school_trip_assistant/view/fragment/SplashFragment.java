@@ -38,6 +38,12 @@ public final class SplashFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        onFragmentInteractionListener.finishSplashScreen(this);
+    }
+
+    @Override
     public void onDetach() {
         onFragmentInteractionListener = null;
         super.onDetach();

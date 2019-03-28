@@ -45,6 +45,11 @@ public final class StudentListActivity extends AppCompatActivity implements OnFr
         studentAdapter.setData(viewModel.getStudentsFromDatabase());
     }
 
+    @Override
+    public void finishSplashScreen(Fragment fragment) {
+        closeFragment(fragment);
+    }
+
     private void setFabListener(FloatingActionButton fab) {
         fab.setOnClickListener(view -> showInputFragment());
     }
