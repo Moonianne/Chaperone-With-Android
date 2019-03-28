@@ -6,6 +6,7 @@ import android.content.Context;
 import org.pursuit.school_trip_assistant.db.StudentDatabase;
 import org.pursuit.school_trip_assistant.model.Student;
 
+import java.util.Collections;
 import java.util.List;
 
 public final class StudentsViewModel extends ViewModel {
@@ -20,6 +21,8 @@ public final class StudentsViewModel extends ViewModel {
     }
 
     public List<Student> getStudentsFromDatabase() {
-        return studentDatabase.getStudentList();
+        List<Student> students = studentDatabase.getStudentList();
+        Collections.sort(students, Student.studentComparator);
+        return students;
     }
 }
