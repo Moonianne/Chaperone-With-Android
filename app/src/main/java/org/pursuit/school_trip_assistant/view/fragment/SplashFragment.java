@@ -16,6 +16,7 @@ import org.pursuit.school_trip_assistant.view.OnFragmentInteractionListener;
 public final class SplashFragment extends Fragment {
     private static final long TIMER_DURATION = 2000;
     private static final long TIMER_INTERVAL = 1000;
+
     private OnFragmentInteractionListener onFragmentInteractionListener;
 
     public static SplashFragment newInstance() {
