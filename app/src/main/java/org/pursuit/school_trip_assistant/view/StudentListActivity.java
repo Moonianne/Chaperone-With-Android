@@ -14,6 +14,7 @@ import android.view.View;
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.model.Student;
 import org.pursuit.school_trip_assistant.view.fragment.InputStudentFragment;
+import org.pursuit.school_trip_assistant.view.fragment.SplashFragment;
 import org.pursuit.school_trip_assistant.view.recyclerview.StudentAdapter;
 import org.pursuit.school_trip_assistant.viewmodel.StudentsViewModel;
 
@@ -28,6 +29,7 @@ public final class StudentListActivity extends AppCompatActivity implements OnFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_list);
+        inflateFragment(SplashFragment.newInstance());
         setSupportActionBar(findViewById(R.id.toolbar));
         setFabListener(findViewById(R.id.fab));
 
@@ -56,6 +58,10 @@ public final class StudentListActivity extends AppCompatActivity implements OnFr
 
     private void showInputFragment() {
         inflateFragment(InputStudentFragment.newInstance(), true);
+    }
+
+    private void inflateFragment(Fragment fragment) {
+        inflateFragment(fragment, false);
     }
 
     private void inflateFragment(Fragment fragment, boolean isBackStack) {
