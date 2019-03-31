@@ -8,4 +8,8 @@ public interface OnFragmentInteractionListener {
     void addStudentToDatabase(Student student, Fragment fragment);
 
     void finishSplashScreen(Fragment fragment);
+
+    String getStudentFullName(int iD);
+
+    String getEmergencyContact(int iD);
 }

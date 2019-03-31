@@ -52,17 +52,17 @@ public final class StudentDatabase extends SQLiteOpenHelper {
         cursor.close();
     }
 
-    public Student getStudent(String lastName, String firstName) {
+    public Student getStudent(int iD) {
         Student student = null;
-        Cursor cursor = getReadableDatabase().rawQuery("SELECT image_url FROM " + TABLE_NAME +
-                " WHERE last_name = '" + lastName +
-                "' AND first_name = '" + firstName + "'; ", null);
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_NAME +
+                " WHERE _id = " + iD + "; ", null);
 
         if (cursor != null) {
+            cursor.moveToFirst();
             student = new Student(
                     cursor.getString(cursor.getColumnIndex("first_name")),
                     cursor.getString(cursor.getColumnIndex("last_name")),
-                    cursor.getString(cursor.getColumnIndex("emergency_number")));
+                    cursor.getString(cursor.getColumnIndex("emergency_number")), iD);
         }
         return student;
     }
@@ -77,7 +77,8 @@ public final class StudentDatabase extends SQLiteOpenHelper {
                     Student student = new Student(
                             cursor.getString(cursor.getColumnIndex("first_name")),
                             cursor.getString(cursor.getColumnIndex("last_name")),
-                            cursor.getString(cursor.getColumnIndex("emergency_number")));
+                            cursor.getString(cursor.getColumnIndex("emergency_number")),
+                            cursor.getInt(cursor.getColumnIndex("_id")));
                     studentList.add(student);
                 } while (cursor.moveToNext());
             }
