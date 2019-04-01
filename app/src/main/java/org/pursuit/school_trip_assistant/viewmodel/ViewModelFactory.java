@@ -6,8 +6,9 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-public class ViewModelFactory implements ViewModelProvider.Factory {
-    private Context context;
+public final class ViewModelFactory implements ViewModelProvider.Factory {
+    private final Context context;
+
     public ViewModelFactory(Context context) {
         this.context = context;
     }
