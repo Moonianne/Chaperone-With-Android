@@ -14,4 +14,6 @@
     <string name="save_student">Save Student</string>
     <string name="last_name_field">Last Name</string>
     <string name="first_name_field">First Name</string>
+    <string name="student_name">Student: %1$s</string>
+    <string name="emergency_contact">Emergency Contact: %1$s</string>
 </resources>

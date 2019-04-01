@@ -7,13 +7,16 @@ import android.view.ViewGroup;
 
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.model.Student;
+import org.pursuit.school_trip_assistant.view.ItemClickListener;
 
 import java.util.List;
 
 public final class StudentAdapter extends RecyclerView.Adapter<StudentViewHolder> {
+    private final ItemClickListener itemClickListener;
     private List<Student> students;
 
-    public StudentAdapter(List<Student> students) {
+    public StudentAdapter(ItemClickListener itemClickListener, List<Student> students) {
+        this.itemClickListener = itemClickListener;
         this.students = students;
     }
 
@@ -27,7 +30,7 @@ public final class StudentAdapter extends RecyclerView.Adapter<StudentViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull StudentViewHolder studentViewHolder, int i) {
-        studentViewHolder.onBind(students.get(i));
+        studentViewHolder.onBind(students.get(i), itemClickListener);
     }
 
     @Override
