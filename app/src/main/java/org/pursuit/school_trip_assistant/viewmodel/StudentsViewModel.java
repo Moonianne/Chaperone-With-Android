@@ -52,13 +52,6 @@ public final class StudentsViewModel extends ViewModel {
         studentList.postValue(students);
     }
 
-//    public Single<List<String>> getListStudentNames() {
-//        return Observable.fromIterable(getStudentsFromDatabase())
-//                .subscribeOn(Schedulers.computation())
-//                .map(student -> student.lastName + ", " + student.firstName)
-//                .toList();
-//    }
-
     public LiveData<List<Student>> getStudentList() {
         return studentList;
     }
