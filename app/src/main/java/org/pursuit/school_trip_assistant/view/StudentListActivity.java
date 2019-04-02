@@ -17,6 +17,7 @@ import org.pursuit.school_trip_assistant.model.Student;
 import org.pursuit.school_trip_assistant.view.fragment.DisplayStudentFragment;
 import org.pursuit.school_trip_assistant.view.fragment.InputStudentFragment;
 import org.pursuit.school_trip_assistant.view.fragment.SplashFragment;
+import org.pursuit.school_trip_assistant.view.fragment.TripInputFragment;
 import org.pursuit.school_trip_assistant.view.recyclerview.StudentAdapter;
 import org.pursuit.school_trip_assistant.viewmodel.StudentsViewModel;
 import org.pursuit.school_trip_assistant.viewmodel.ViewModelFactory;
@@ -43,6 +44,7 @@ public final class StudentListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_list);
         inflateFragment(SplashFragment.newInstance());
+        inflateFragment(TripInputFragment.newInstance());
         setSupportActionBar(findViewById(R.id.toolbar));
         setFabListener(findViewById(R.id.fab));
 

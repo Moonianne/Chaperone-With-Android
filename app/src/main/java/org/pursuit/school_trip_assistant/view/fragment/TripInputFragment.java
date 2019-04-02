@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.view.OnFragmentInteractionListener;
 
-public class TripInputFragment extends Fragment {
+public final class TripInputFragment extends Fragment {
     private OnFragmentInteractionListener onFragmentInteractionListener;
 
     public static TripInputFragment newInstance() {
