@@ -14,7 +14,7 @@ import org.pursuit.school_trip_assistant.model.Student;
 import org.pursuit.school_trip_assistant.view.fragment.DisplayStudentFragment;
 import org.pursuit.school_trip_assistant.view.fragment.InputStudentFragment;
 import org.pursuit.school_trip_assistant.view.fragment.SplashFragment;
-import org.pursuit.school_trip_assistant.view.fragment.InputTripDetails.TripInputFragment;
+import org.pursuit.school_trip_assistant.view.fragment.input_trip_details.TripInputFragment;
 import org.pursuit.school_trip_assistant.view.recyclerview.StudentAdapter;
 import org.pursuit.school_trip_assistant.viewmodel.StudentsViewModel;
 import org.pursuit.school_trip_assistant.viewmodel.ViewModelFactory;

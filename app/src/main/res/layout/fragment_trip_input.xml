@@ -8,7 +8,7 @@
     android:clickable="true"
     android:elevation="8dp"
     android:focusable="true"
-    tools:context=".view.fragment.InputTripDetails.TripInputFragment">
+    tools:context=".view.fragment.input_trip_details.TripInputFragment">
 
     <EditText
         android:id="@+id/edit_destination"

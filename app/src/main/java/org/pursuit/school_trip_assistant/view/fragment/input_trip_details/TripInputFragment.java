@@ -1,4 +1,4 @@
-package org.pursuit.school_trip_assistant.view.fragment.InputTripDetails;
+package org.pursuit.school_trip_assistant.view.fragment.input_trip_details;
 
 
 import android.content.Context;

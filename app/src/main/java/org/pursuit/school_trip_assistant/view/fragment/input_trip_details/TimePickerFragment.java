@@ -1,4 +1,4 @@
-package org.pursuit.school_trip_assistant.view.fragment.InputTripDetails;
+package org.pursuit.school_trip_assistant.view.fragment.input_trip_details;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -52,7 +52,7 @@ public abstract class TimePickerFragment extends DialogFragment
         this.listener = onTimePickerListener;
     }
 
-    public static class StartTimePicker extends TimePickerFragment {
+    public static final class StartTimePicker extends TimePickerFragment {
 
         @Override
         public void setTime(String time, String timeKey) {
@@ -60,7 +60,7 @@ public abstract class TimePickerFragment extends DialogFragment
         }
     }
 
-    public static class EndTimePicker extends TimePickerFragment {
+    public static final class EndTimePicker extends TimePickerFragment {
 
         @NotNull
         @Override
