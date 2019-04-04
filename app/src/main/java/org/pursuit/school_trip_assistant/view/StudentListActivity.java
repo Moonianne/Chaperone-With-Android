@@ -1,10 +1,7 @@
 package org.pursuit.school_trip_assistant.view;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -17,18 +14,12 @@ import org.pursuit.school_trip_assistant.model.Student;
 import org.pursuit.school_trip_assistant.view.fragment.DisplayStudentFragment;
 import org.pursuit.school_trip_assistant.view.fragment.InputStudentFragment;
 import org.pursuit.school_trip_assistant.view.fragment.SplashFragment;
-import org.pursuit.school_trip_assistant.view.fragment.TripInputFragment;
+import org.pursuit.school_trip_assistant.view.fragment.InputTripDetails.TripInputFragment;
 import org.pursuit.school_trip_assistant.view.recyclerview.StudentAdapter;
 import org.pursuit.school_trip_assistant.viewmodel.StudentsViewModel;
 import org.pursuit.school_trip_assistant.viewmodel.ViewModelFactory;
 
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import io.reactivex.Completable;
-import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
 
 public final class StudentListActivity extends AppCompatActivity
         implements OnFragmentInteractionListener, ItemClickListener {
