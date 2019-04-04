@@ -32,7 +32,6 @@ public abstract class TimePickerFragment extends DialogFragment
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        // Do something with the time chosen by the user
         String time = (hourOfDay % 12) + ":" +
                 ((minute < 10) ? "0" + minute : minute) +
                 ((hourOfDay >= 12) ? " PM" : " AM");
@@ -41,6 +40,8 @@ public abstract class TimePickerFragment extends DialogFragment
     }
 
     public void setTime(String time, String timeKey) {
+        if (getActivity() == null)
+            throw new NullPointerException("Invoked Method on Null Activity.");
         getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
                 .edit()
                 .putString(timeKey, time)

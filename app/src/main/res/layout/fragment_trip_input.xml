@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:clickable="true"
-    android:focusable="true"
     android:elevation="8dp"
+    android:focusable="true"
     tools:context=".view.fragment.InputTripDetails.TripInputFragment">
 
     <EditText
@@ -91,6 +91,20 @@
         app:layout_constraintEnd_toEndOf="@+id/end_time_hint"
         app:layout_constraintStart_toStartOf="@+id/end_time_hint"
         app:layout_constraintTop_toBottomOf="@id/end_time_hint" />
+
+
+    <TextView
+        android:id="@+id/click_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/done"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

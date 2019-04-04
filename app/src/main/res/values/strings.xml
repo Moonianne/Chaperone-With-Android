@@ -17,4 +17,5 @@
     <string name="student_name">Student: %1$s</string>
     <string name="emergency_contact">Emergency Contact: %1$s</string>
     <string name="trip_input_hint">We are going to...</string>
+    <string name="done">Done</string>
 </resources>
