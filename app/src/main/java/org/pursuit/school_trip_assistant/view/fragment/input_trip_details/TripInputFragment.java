@@ -33,6 +33,8 @@ public final class TripInputFragment extends Fragment
 
     private OnFragmentInteractionListener onFragmentInteractionListener;
     private SharedPreferences sharedPreferences;
+    private Disposable disposableStart;
+    private Disposable disposableEnd;
     private TextView startTime;
     private TextView endTime;
 
@@ -69,8 +71,16 @@ public final class TripInputFragment extends Fragment
                     SHARED_PREFS, Context.MODE_PRIVATE);
         startTime = view.findViewById(R.id.clickable_start_time);
         endTime = view.findViewById(R.id.clickable_end_time);
-        Disposable disposableStart = getSubscribe(startTime);
-        Disposable disposableEnd = getSubscribe(endTime);
+        disposableStart = getSubscribe(startTime);
+        disposableEnd = getSubscribe(endTime);
+    }
+
+    @Override
+    public void onDetach() {
+        disposableStart.dispose();
+        disposableEnd.dispose();
+        onFragmentInteractionListener = null;
+        super.onDetach();
     }
 
     @Override
@@ -88,11 +98,12 @@ public final class TripInputFragment extends Fragment
                 .map(this::getTimePicker)
                 .doOnNext(timePickerFragment -> timePickerFragment.setOnTimePickListener(this))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(timePickerFragment -> {
-                    if (getFragmentManager() != null) {
-                        timePickerFragment.show(getFragmentManager(), TAG);
-                    }
-                });
+                .subscribe(this::showTimePicker);
+    }
+
+    private void showTimePicker(TimePickerFragment timePickerFragment) {
+        if (getFragmentManager() != null)
+            timePickerFragment.show(getFragmentManager(), TAG);
     }
 
     private TimePickerFragment getTimePicker(Integer iD) {
