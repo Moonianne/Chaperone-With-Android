@@ -71,6 +71,7 @@ public final class TripInputFragment extends Fragment
                     SHARED_PREFS, Context.MODE_PRIVATE);
         startTime = view.findViewById(R.id.clickable_start_time);
         endTime = view.findViewById(R.id.clickable_end_time);
+        TextView dateSelect = view.findViewById(R.id.date_text);
         disposableStart = getSubscribe(startTime);
         disposableEnd = getSubscribe(endTime);
     }
@@ -84,7 +85,7 @@ public final class TripInputFragment extends Fragment
     }
 
     @Override
-    public void setTimeView() {
+    public void onTimePick() {
         startTime.setText(sharedPreferences.getString(START_PREFS, "12:00 AM"));
         endTime.setText(sharedPreferences.getString(END_PREFS, "12:00 AM"));
     }
@@ -100,6 +101,8 @@ public final class TripInputFragment extends Fragment
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::showTimePicker);
     }
+
+
 
     private void showTimePicker(TimePickerFragment timePickerFragment) {
         if (getFragmentManager() != null)

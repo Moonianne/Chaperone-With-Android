@@ -48,7 +48,7 @@ public class TimePickerFragment extends DialogFragment
                 ((minute < 10) ? "0" + minute : minute) +
                 ((hourOfDay >= 12) ? " PM" : " AM");
         setTime(time, TIME_PREFS);
-        listener.setTimeView();
+        listener.onTimePick();
     }
 
     public void setTime(String time, String timeKey) {
@@ -87,6 +87,6 @@ public class TimePickerFragment extends DialogFragment
     }
 
     interface OnTimePickListener {
-        void setTimeView();
+        void onTimePick();
     }
 }
