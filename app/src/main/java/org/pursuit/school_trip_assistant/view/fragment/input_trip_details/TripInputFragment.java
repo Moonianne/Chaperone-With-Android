@@ -20,12 +20,15 @@ import org.pursuit.school_trip_assistant.view.OnFragmentInteractionListener;
 
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public final class TripInputFragment extends Fragment
-        implements TimePickerFragment.OnTimePickListener {
+        implements TimePickerFragment.OnTimePickListener,
+        DatePickerFragment.OnDatePickListener {
     private static final String SHARED_PREFS = "ASSISTANT";
     private static final String START_PREFS = "START_TIME";
     private static final String END_PREFS = "END_TIME";
@@ -35,6 +38,8 @@ public final class TripInputFragment extends Fragment
     private SharedPreferences sharedPreferences;
     private Disposable disposableStart;
     private Disposable disposableEnd;
+    private Disposable disposableDate;
+    private TextView dateSelect;
     private TextView startTime;
     private TextView endTime;
 
@@ -71,15 +76,17 @@ public final class TripInputFragment extends Fragment
                     SHARED_PREFS, Context.MODE_PRIVATE);
         startTime = view.findViewById(R.id.clickable_start_time);
         endTime = view.findViewById(R.id.clickable_end_time);
-        TextView dateSelect = view.findViewById(R.id.date_text);
-        disposableStart = getSubscribe(startTime);
-        disposableEnd = getSubscribe(endTime);
+        dateSelect = view.findViewById(R.id.date_text);
+        setClickResponse(dateSelect);
+        disposableStart = setClickResponse(startTime);
+        disposableEnd = setClickResponse(endTime);
     }
 
     @Override
     public void onDetach() {
         disposableStart.dispose();
         disposableEnd.dispose();
+        disposableDate.dispose();
         onFragmentInteractionListener = null;
         super.onDetach();
     }
@@ -90,23 +97,53 @@ public final class TripInputFragment extends Fragment
         endTime.setText(sharedPreferences.getString(END_PREFS, "12:00 AM"));
     }
 
+    @Override
+    public void onDatePick() {
+        dateSelect.setText(sharedPreferences.getString(DatePickerFragment.DATE_PREFS, "Mon, Apr 1, 2019"));
+    }
+
     @NotNull
-    private Disposable getSubscribe(TextView textView) {
-        return RxView.clicks(textView)
+    private Disposable setClickResponse(TextView textView) {
+        Observable<Integer> iD = RxView.clicks(textView)
                 .observeOn(Schedulers.io())
                 .debounce(300L, TimeUnit.MILLISECONDS)
-                .map(click -> textView.getId())
-                .map(this::getTimePicker)
-                .doOnNext(timePickerFragment -> timePickerFragment.setOnTimePickListener(this))
+                .map(click -> textView.getId());
+        return getDisposable(iD);
+    }
+
+    private Disposable getDisposable(Observable<Integer> viewId) {
+        return viewId.subscribe(this::findDisposableById);
+    }
+
+    private Disposable findDisposableById(Integer iD) {
+        if (iD == R.id.date_text)
+            return getDateDisposable(Single.just(iD));
+        return getTimeDisposable(Single.just(iD));
+    }
+
+    private Disposable getTimeDisposable(Single<Integer> viewId) {
+        return viewId.map(this::getTimePicker)
+                .doOnSuccess(timePickerFragment -> timePickerFragment.setOnTimePickListener(this))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::showTimePicker);
     }
 
-
+    private Disposable getDateDisposable(Single<Integer> viewId) {
+        disposableDate = viewId.map(iD -> new DatePickerFragment())
+                .doOnSuccess(datePickerFragment -> datePickerFragment.setOnDatePickListener(this))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(datePickerFragment -> showDatePicker(datePickerFragment));
+        return disposableDate;
+    }
 
     private void showTimePicker(TimePickerFragment timePickerFragment) {
         if (getFragmentManager() != null)
             timePickerFragment.show(getFragmentManager(), TAG);
+    }
+
+    private void showDatePicker(DatePickerFragment datePickerFragment) {
+        if (getFragmentManager() != null)
+            datePickerFragment.show(getFragmentManager(), TAG);
     }
 
     private TimePickerFragment getTimePicker(Integer iD) {

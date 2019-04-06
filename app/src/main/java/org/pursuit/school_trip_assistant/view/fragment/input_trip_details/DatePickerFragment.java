@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.widget.DatePicker;
 
 import java.util.Calendar;
@@ -16,10 +17,10 @@ public final class DatePickerFragment extends DialogFragment
 
     private static final String[] MONTH = {"Jan", "Feb", "Mar", "Apr", "May"
             , "Jun", "Jul", "Aug", "Sep", "Nov", "Dec"};
-    private static final String[] DAY = {"Sun", "Mon", "Tues", "Wed",
-            "Thurs", "Fri", "Sat"};
+    private static final String[] DAY = {"Sat", "Sun", "Mon", "Tues", "Wed",
+            "Thurs", "Fri"};
     private static final String SHARED_PREFS = "ASSISTANT";
-    private static final String DATE_PREFS = "DATE";
+    public static final String DATE_PREFS = "DATE";
 
     private final Calendar calendar;
     private OnDatePickListener listener;
@@ -30,8 +31,6 @@ public final class DatePickerFragment extends DialogFragment
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Date now = new Date();
-        calendar.setTime(now);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -40,8 +39,10 @@ public final class DatePickerFragment extends DialogFragment
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
+        Date newDate = new Date(year, month, day);
+        calendar.setTime(newDate);
         String date = getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK))
-                + getMonth(month) + ", " + day + ", " + year;
+                + " " + getMonth(month) + ", " + day + ", " + year;
         setDate(date);
         listener.onDatePick();
     }
@@ -56,11 +57,12 @@ public final class DatePickerFragment extends DialogFragment
     }
 
     private String getDayOfWeek(int i) {
+        Log.d("getDayOfWeek", "getDayOfWeek: " + i);
         return DAY[i - 1];
     }
 
     private String getMonth(int i) {
-        return MONTH[i - 1];
+        return MONTH[i];
     }
 
     public void setOnDatePickListener(OnDatePickListener listener) {
