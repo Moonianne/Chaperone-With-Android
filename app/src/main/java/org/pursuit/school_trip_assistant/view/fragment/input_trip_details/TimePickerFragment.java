@@ -27,6 +27,17 @@ public abstract class TimePickerFragment extends DialogFragment
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
+        return getTimePickerDialog(hour, minute);
+    }
+
+    @Override
+    public void onDetach() {
+        listener = null;
+        super.onDetach();
+    }
+
+    @NotNull
+    public Dialog getTimePickerDialog(int hour, int minute) {
         return new TimePickerDialog(getActivity(), this, hour, minute,
                 DateFormat.is24HourFormat(getActivity()));
     }
@@ -65,12 +76,8 @@ public abstract class TimePickerFragment extends DialogFragment
 
         @NotNull
         @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY) + 4;
-            int minute = c.get(Calendar.MINUTE);
-            return new TimePickerDialog(getActivity(), this, hour, minute,
-                    DateFormat.is24HourFormat(getActivity()));
+        public Dialog getTimePickerDialog(int hour, int minute) {
+            return super.getTimePickerDialog(hour + 4, minute);
         }
 
         @Override
