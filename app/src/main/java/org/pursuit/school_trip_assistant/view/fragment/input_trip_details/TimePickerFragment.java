@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
 
-public abstract class TimePickerFragment extends DialogFragment
+public class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
     private static final String SHARED_PREFS = "ASSISTANT";
     private static final String TIME_PREFS = "TIK_TOK";
