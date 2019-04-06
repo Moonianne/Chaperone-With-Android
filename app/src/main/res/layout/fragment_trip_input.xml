@@ -95,14 +95,15 @@
         app:layout_constraintTop_toBottomOf="@id/end_time_hint" />
 
 
-    <TextView
+    <android.support.design.button.MaterialButton
         android:id="@+id/click_done"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
-        android:clickable="true"
-        android:focusable="true"
+        android:background="@android:color/white"
         android:text="@string/done"
+        android:textAppearance="@style/Widget.MaterialComponents.Button.TextButton"
         android:textColor="@color/colorAccent"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"

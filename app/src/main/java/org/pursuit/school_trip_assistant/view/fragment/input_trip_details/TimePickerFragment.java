@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 import android.widget.TimePicker;
@@ -12,81 +13,82 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
 
-public class TimePickerFragment extends DialogFragment
-        implements TimePickerDialog.OnTimeSetListener {
-    private static final String SHARED_PREFS = "ASSISTANT";
-    private static final String TIME_PREFS = "TIK_TOK";
-    private static final String START_PREFS = "START_TIME";
-    private static final String END_PREFS = "END_TIME";
+public final class TimePickerFragment extends DialogFragment
+  implements TimePickerDialog.OnTimeSetListener {
 
-    private OnTimePickListener listener;
+  private static final String SHARED_PREFS = "ASSISTANT";
+  private static final String TIME_KEY = "TIME_KEY";
+  private static final String OFFSET_KEY = "OFFSET_KEY";
 
-    @NotNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
-        return getTimePickerDialog(hour, minute);
+  private OnTimePickListener listener;
+  private String timePrefs;
+  private int hourOffSet;
+
+  public static TimePickerFragment newInstance(String timePref, int hourOffSet) {
+    TimePickerFragment fragment = new TimePickerFragment();
+    Bundle args = new Bundle();
+    args.putString(TIME_KEY, timePref);
+    args.putInt(OFFSET_KEY, hourOffSet);
+    fragment.setArguments(args);
+    return fragment;
+  }
+
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    if (getArguments() != null) {
+      Bundle receivedBundle = getArguments();
+      timePrefs = receivedBundle.getString(TIME_KEY);
+      hourOffSet = receivedBundle.getInt(OFFSET_KEY);
+    } else {
+      throw new RuntimeException("Did not pass data to new instance.");
     }
+  }
 
-    @Override
-    public void onDetach() {
-        listener = null;
-        super.onDetach();
-    }
+  @NotNull
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    final Calendar c = Calendar.getInstance();
+    int hour = c.get(Calendar.HOUR_OF_DAY);
+    int minute = c.get(Calendar.MINUTE);
+    return getTimePickerDialog(hour + hourOffSet, minute);
+  }
 
-    @NotNull
-    public Dialog getTimePickerDialog(int hour, int minute) {
-        return new TimePickerDialog(getActivity(), this, hour, minute,
-                DateFormat.is24HourFormat(getActivity()));
-    }
+  @Override
+  public void onDetach() {
+    listener = null;
+    super.onDetach();
+  }
 
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        int hourOfDayTwelveHour = (hourOfDay % 12) == 0 ? 12 : (hourOfDay % 12);
-        String time = hourOfDayTwelveHour + ":" +
-                ((minute < 10) ? "0" + minute : minute) +
-                ((hourOfDay >= 12) ? " PM" : " AM");
-        setTime(time, TIME_PREFS);
-        listener.onTimePick();
-    }
+  @NotNull
+  public Dialog getTimePickerDialog(int hour, int minute) {
+    return new TimePickerDialog(getActivity(), this, hour, minute,
+      DateFormat.is24HourFormat(getActivity()));
+  }
 
-    public void setTime(String time, String timeKey) {
-        if (getActivity() == null)
-            throw new NullPointerException("Invoked Method on Null Activity.");
-        getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
-                .edit()
-                .putString(timeKey, time)
-                .apply();
-    }
+  public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+    int hourOfDayTwelveHour = (hourOfDay % 12) == 0 ? 12 : (hourOfDay % 12);
+    String time = hourOfDayTwelveHour + ":" +
+      ((minute < 10) ? "0" + minute : minute) +
+      ((hourOfDay >= 12) ? " PM" : " AM");
+    setTime(time, timePrefs);
+    listener.onTimePick();
+  }
 
-    public void setOnTimePickListener(OnTimePickListener onTimePickerListener) {
-        this.listener = onTimePickerListener;
-    }
+  public void setTime(String time, String timeKey) {
+    if (getActivity() == null)
+      throw new NullPointerException("Invoked Method on Null Activity.");
+    getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+      .edit()
+      .putString(timeKey, time)
+      .apply();
+  }
 
-    public static final class StartTimePicker extends TimePickerFragment {
+  public void setOnTimePickListener(OnTimePickListener onTimePickerListener) {
+    this.listener = onTimePickerListener;
+  }
 
-        @Override
-        public void setTime(String time, String timeKey) {
-            super.setTime(time, START_PREFS);
-        }
-    }
-
-    public static final class EndTimePicker extends TimePickerFragment {
-
-        @NotNull
-        @Override
-        public Dialog getTimePickerDialog(int hour, int minute) {
-            return super.getTimePickerDialog(hour + 4, minute);
-        }
-
-        @Override
-        public void setTime(String time, String timeKey) {
-            super.setTime(time, END_PREFS);
-        }
-    }
-
-    interface OnTimePickListener {
-        void onTimePick();
-    }
+  interface OnTimePickListener {
+    void onTimePick();
+  }
 }
