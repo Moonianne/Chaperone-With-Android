@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.model.Student;
 import org.pursuit.school_trip_assistant.view.OnFragmentInteractionListener;
-import org.pursuit.school_trip_assistant.view.recyclerview.StudentAdapter;
 
 import java.util.Collections;
 import java.util.List;
@@ -68,7 +67,7 @@ public class StudentListFragment extends Fragment
   }
 
   @Override
-  public void showStudentInformation(int iD) {
+  public void onItemClick(int iD) {
     listener.showStudentInformation(iD);
   }
 

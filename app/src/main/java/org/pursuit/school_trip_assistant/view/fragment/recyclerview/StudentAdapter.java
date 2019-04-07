@@ -1,4 +1,4 @@
-package org.pursuit.school_trip_assistant.view.recyclerview;
+package org.pursuit.school_trip_assistant.view.fragment.recyclerview;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.model.Student;
-import org.pursuit.school_trip_assistant.view.fragment.recyclerview.ItemClickListener;
 
 import java.util.List;
 

@@ -2,12 +2,9 @@ package org.pursuit.school_trip_assistant.view;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.model.Student;
@@ -23,7 +20,6 @@ import org.pursuit.school_trip_assistant.viewmodel.ViewModelFactory;
 public final class StudentListActivity extends AppCompatActivity
   implements OnFragmentInteractionListener {
 
-  //    private StudentsViewModel viewModel;
   private StudentsViewModel testViewModel;
   private DataReceiveListener dataReceiveListener;
 
@@ -35,11 +31,8 @@ public final class StudentListActivity extends AppCompatActivity
 
     setSupportActionBar(findViewById(R.id.toolbar));
 
-//        viewModel = new StudentsViewModel(this);
     testViewModel = ViewModelProviders.of(
       this, new ViewModelFactory(this)).get(StudentsViewModel.class);
-
-//        studentAdapter.setData(viewModel.getStudentsFromDatabase());
   }
 
   @Override
@@ -48,7 +41,6 @@ public final class StudentListActivity extends AppCompatActivity
       .subscribe(() -> closeFragment(fragment),
         throwable -> {
         });
-//        studentAdapter.setData(testViewModel.getStudentsFromDatabase());
   }
 
   @Override

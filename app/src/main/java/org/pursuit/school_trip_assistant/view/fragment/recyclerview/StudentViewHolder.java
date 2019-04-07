@@ -1,4 +1,4 @@
-package org.pursuit.school_trip_assistant.view.recyclerview;
+package org.pursuit.school_trip_assistant.view.fragment.recyclerview;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,6 @@ import com.jakewharton.rxbinding3.view.RxView;
 
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.model.Student;
-import org.pursuit.school_trip_assistant.view.fragment.recyclerview.ItemClickListener;
 
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +26,6 @@ final class StudentViewHolder extends RecyclerView.ViewHolder {
 
     RxView.clicks(itemView)
       .debounce(DEBOUNCE_TIMEOUT, TimeUnit.MILLISECONDS)
-      .subscribe(click -> itemClickListener.showStudentInformation(student.iD));
+      .subscribe(click -> itemClickListener.onItemClick(student.iD));
   }
 }
