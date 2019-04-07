@@ -15,20 +15,17 @@ import org.pursuit.school_trip_assistant.view.fragment.DisplayStudentFragment;
 import org.pursuit.school_trip_assistant.view.fragment.InputStudentFragment;
 import org.pursuit.school_trip_assistant.view.fragment.SplashFragment;
 import org.pursuit.school_trip_assistant.view.fragment.input_trip_details.TripInputFragment;
-import org.pursuit.school_trip_assistant.view.recyclerview.StudentAdapter;
+import org.pursuit.school_trip_assistant.view.fragment.recyclerview.DataReceiveListener;
+import org.pursuit.school_trip_assistant.view.fragment.recyclerview.StudentListFragment;
 import org.pursuit.school_trip_assistant.viewmodel.StudentsViewModel;
 import org.pursuit.school_trip_assistant.viewmodel.ViewModelFactory;
 
-import java.util.Collections;
-
 public final class StudentListActivity extends AppCompatActivity
-  implements OnFragmentInteractionListener, ItemClickListener {
-
-  private final StudentAdapter studentAdapter =
-    new StudentAdapter(this, Collections.EMPTY_LIST);
+  implements OnFragmentInteractionListener {
 
   //    private StudentsViewModel viewModel;
   private StudentsViewModel testViewModel;
+  private DataReceiveListener dataReceiveListener;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +34,11 @@ public final class StudentListActivity extends AppCompatActivity
     inflateFragment(SplashFragment.newInstance());
 
     setSupportActionBar(findViewById(R.id.toolbar));
-    setFabListener(findViewById(R.id.fab));
 
 //        viewModel = new StudentsViewModel(this);
-    RecyclerView recyclerView = findViewById(R.id.recycyler_student_list);
-    recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    recyclerView.setAdapter(studentAdapter);
-    testViewModel = ViewModelProviders.of(this, new ViewModelFactory(this)).get(StudentsViewModel.class);
-    testViewModel.getStudentList().observe(this, students -> studentAdapter.setData(students));
+    testViewModel = ViewModelProviders.of(
+      this, new ViewModelFactory(this)).get(StudentsViewModel.class);
+
 //        studentAdapter.setData(viewModel.getStudentsFromDatabase());
   }
 
@@ -74,6 +68,15 @@ public final class StudentListActivity extends AppCompatActivity
   }
 
   @Override
+  public void showStudentList() {
+    StudentListFragment listFragment = StudentListFragment.newInstance();
+    dataReceiveListener = (DataReceiveListener) listFragment;
+    inflateFragment(listFragment);
+    testViewModel.getStudentList().observe(
+      this, students -> dataReceiveListener.onNewDataReceived(students));
+  }
+
+  @Override
   public void showStudentInformation(int iD) {
     inflateFragment(DisplayStudentFragment.newInstance(iD), true);
   }
@@ -86,11 +89,7 @@ public final class StudentListActivity extends AppCompatActivity
       .commit();
   }
 
-  private void setFabListener(FloatingActionButton fab) {
-    fab.setOnClickListener(view -> showInputFragment());
-  }
-
-  private void showInputFragment() {
+  public void showInputFragment() {
     inflateFragment(InputStudentFragment.newInstance(), true);
   }
 

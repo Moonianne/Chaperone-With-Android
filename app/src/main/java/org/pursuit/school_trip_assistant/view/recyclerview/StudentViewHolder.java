@@ -9,7 +9,7 @@ import com.jakewharton.rxbinding3.view.RxView;
 
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.model.Student;
-import org.pursuit.school_trip_assistant.view.ItemClickListener;
+import org.pursuit.school_trip_assistant.view.fragment.recyclerview.ItemClickListener;
 
 import java.util.concurrent.TimeUnit;
 

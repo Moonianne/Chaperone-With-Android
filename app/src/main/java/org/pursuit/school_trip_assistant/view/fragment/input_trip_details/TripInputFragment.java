@@ -149,7 +149,7 @@ public final class TripInputFragment extends Fragment
           sharedPreferences.edit()
             .putString(DEST_PREFS, destination)
             .apply();
-          onFragmentInteractionListener.closeFragment(TripInputFragment.this);
+          onFragmentInteractionListener.showStudentList();
         })
     );
   }
