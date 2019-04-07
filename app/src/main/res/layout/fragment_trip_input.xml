@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:elevation="8dp"
+    android:focusable="true"
+    tools:context=".view.fragment.input_trip_details.TripInputFragment">
+
+    <EditText
+        android:id="@+id/edit_destination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/trip_input_hint"
+        android:textSize="32sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/trip_date_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Day?"
+        android:textSize="@dimen/trip_info_font"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_destination" />
+
+    <TextView
+        android:id="@+id/date_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="Mon, Apr 1, 2019"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/trip_info_font"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/trip_date_hint" />
+
+    <TextView
+        android:id="@+id/start_time_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Starts at?"
+        android:textSize="@dimen/trip_info_font"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/end_time_hint"
+        app:layout_constraintTop_toBottomOf="@id/date_text" />
+
+    <TextView
+        android:id="@+id/clickable_start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="9:45 AM"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/trip_info_font"
+        app:layout_constraintEnd_toEndOf="@+id/start_time_hint"
+        app:layout_constraintStart_toStartOf="@+id/start_time_hint"
+        app:layout_constraintTop_toBottomOf="@id/start_time_hint" />
+
+    <TextView
+        android:id="@+id/end_time_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Ends at?"
+        android:textSize="@dimen/trip_info_font"
+        app:layout_constraintLeft_toRightOf="@id/start_time_hint"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date_text" />
+
+    <TextView
+        android:id="@+id/clickable_end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="2:30 PM"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/trip_info_font"
+        app:layout_constraintEnd_toEndOf="@+id/end_time_hint"
+        app:layout_constraintStart_toStartOf="@+id/end_time_hint"
+        app:layout_constraintTop_toBottomOf="@id/end_time_hint" />
+
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/click_done"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:background="@android:color/white"
+        android:text="@string/done"
+        android:textAppearance="@style/Widget.MaterialComponents.Button.TextButton"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

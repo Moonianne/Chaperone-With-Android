@@ -5,11 +5,13 @@ import android.support.v4.app.Fragment;
 import org.pursuit.school_trip_assistant.model.Student;
 
 public interface OnFragmentInteractionListener {
-    void addStudentToDatabase(Student student, Fragment fragment);
+  void addStudentToDatabase(Student student, Fragment fragment);
 
-    void finishSplashScreen(Fragment fragment);
+  void finishSplashScreen(Fragment fragment);
 
-    String getStudentFullName(int iD);
+  void closeFragment(Fragment fragment);
 
-    String getEmergencyContact(int iD);
+  String getStudentFullName(int iD);
+
+  String getEmergencyContact(int iD);
 }
