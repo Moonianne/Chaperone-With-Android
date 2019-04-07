@@ -6,10 +6,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.button.MaterialButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding3.view.RxView;
@@ -22,27 +24,34 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import kotlin.Unit;
 
 public final class TripInputFragment extends Fragment
   implements TimePickerFragment.OnTimePickListener,
   DatePickerFragment.OnDatePickListener {
 
   private static final String SHARED_PREFS = "ASSISTANT";
+  private static final String DEST_PREFS = "DESTINATION";
   private static final String START_PREFS = "START_TIME";
   private static final String END_PREFS = "END_TIME";
+  private static final long DEBOUNCE = 300; 
   private static final String TAG = "TripInputFrag.TAG";
 
   private OnFragmentInteractionListener onFragmentInteractionListener;
   private SharedPreferences sharedPreferences;
   private CompositeDisposable disposables = new CompositeDisposable();
+  private EditText editTrip;
   private TextView dateSelect;
   private TextView startTime;
   private TextView endTime;
+  private MaterialButton doneButton;
   private ObservableTransformer<Integer, TimePickerFragment> timeViewIdToFragment =
     timeViewIds -> timeViewIds
       .observeOn(Schedulers.io())
-      .debounce(300L, TimeUnit.MILLISECONDS)
+      .debounce(DEBOUNCE, TimeUnit.MILLISECONDS)
       .map(this::getTimePicker)
       .doOnNext(timePickerFragment -> timePickerFragment.setOnTimePickListener(TripInputFragment.this));
 
@@ -78,10 +87,11 @@ public final class TripInputFragment extends Fragment
       sharedPreferences = getActivity().getSharedPreferences(
         SHARED_PREFS, Context.MODE_PRIVATE);
     }
+    editTrip = view.findViewById(R.id.edit_destination);
     dateSelect = view.findViewById(R.id.date_text);
     startTime = view.findViewById(R.id.clickable_start_time);
     endTime = view.findViewById(R.id.clickable_end_time);
-
+    doneButton = view.findViewById(R.id.click_done);
     disposables = new CompositeDisposable();
     setupViewStreams();
   }
@@ -108,7 +118,7 @@ public final class TripInputFragment extends Fragment
     disposables.add(
       RxView.clicks(dateSelect)
         .observeOn(Schedulers.io())
-        .debounce(300L, TimeUnit.MILLISECONDS)
+        .debounce(DEBOUNCE, TimeUnit.MILLISECONDS)
         .map(click -> new DatePickerFragment())
         .doOnNext(datePickerFragment2 -> datePickerFragment2.setOnDatePickListener(this))
         .observeOn(AndroidSchedulers.mainThread())
@@ -129,6 +139,18 @@ public final class TripInputFragment extends Fragment
         .compose(timeViewIdToFragment)
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(this::showTimePicker)
+    );
+
+    disposables.add(
+      RxView.clicks(doneButton)
+        .debounce(DEBOUNCE, TimeUnit.MILLISECONDS)
+        .map(click -> editTrip.getText().toString())
+        .subscribe(destination -> {
+          sharedPreferences.edit()
+            .putString(DEST_PREFS, destination)
+            .apply();
+          onFragmentInteractionListener.closeFragment(TripInputFragment.this);
+        })
     );
   }
 
