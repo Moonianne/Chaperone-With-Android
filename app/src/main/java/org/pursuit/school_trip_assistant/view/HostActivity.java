@@ -17,7 +17,7 @@ import org.pursuit.school_trip_assistant.view.fragment.recyclerview.StudentListF
 import org.pursuit.school_trip_assistant.viewmodel.StudentsViewModel;
 import org.pursuit.school_trip_assistant.viewmodel.ViewModelFactory;
 
-public final class StudentListActivity extends AppCompatActivity
+public final class HostActivity extends AppCompatActivity
   implements OnFragmentInteractionListener {
 
   private StudentsViewModel testViewModel;
@@ -26,7 +26,7 @@ public final class StudentListActivity extends AppCompatActivity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_student_list);
+    setContentView(R.layout.activity_host);
     inflateFragment(SplashFragment.newInstance());
 
     setSupportActionBar(findViewById(R.id.toolbar));
