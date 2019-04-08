@@ -12,8 +12,12 @@ import org.pursuit.school_trip_assistant.model.Student;
 
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.disposables.Disposable;
+
 final class StudentViewHolder extends RecyclerView.ViewHolder {
   private static final long DEBOUNCE_TIMEOUT = 300;
+
+  private Disposable disposable;
 
   StudentViewHolder(@NonNull View itemView) {
     super(itemView);
@@ -24,8 +28,13 @@ final class StudentViewHolder extends RecyclerView.ViewHolder {
     TextView textView = itemView.findViewById(R.id.rv_student_name);
     textView.setText(studentFullName);
 
-    RxView.clicks(itemView)
+    disposable = RxView.clicks(itemView)
       .debounce(DEBOUNCE_TIMEOUT, TimeUnit.MILLISECONDS)
-      .subscribe(click -> itemClickListener.onItemClick(student.iD));
+      .subscribe(click -> onClick(itemClickListener, student.iD));
+  }
+
+  private void onClick(ItemClickListener itemClickListener, int iD) {
+    itemClickListener.onItemClick(iD);
+    disposable.dispose();
   }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.model.Student;
@@ -17,30 +18,39 @@ import org.pursuit.school_trip_assistant.view.fragment.recyclerview.StudentListF
 import org.pursuit.school_trip_assistant.viewmodel.StudentsViewModel;
 import org.pursuit.school_trip_assistant.viewmodel.ViewModelFactory;
 
+import io.reactivex.disposables.Disposable;
+
 public final class HostActivity extends AppCompatActivity
   implements OnFragmentInteractionListener {
 
+  private static final String TAG = "HostActivity.TAG";
+
   private StudentsViewModel testViewModel;
   private DataReceiveListener dataReceiveListener;
+  private Disposable disposable;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_host);
+
     inflateFragment(SplashFragment.newInstance());
-
     setSupportActionBar(findViewById(R.id.toolbar));
-
     testViewModel = ViewModelProviders.of(
       this, new ViewModelFactory(this)).get(StudentsViewModel.class);
   }
 
   @Override
+  protected void onDestroy() {
+    disposable.dispose();
+    super.onDestroy();
+  }
+
+  @Override
   public void addStudentToDatabase(Student student, Fragment fragment) {
-    testViewModel.addStudentToDatabase(student)
-      .subscribe(() -> closeFragment(fragment),
-        throwable -> {
-        });
+    disposable = testViewModel.addStudentToDatabase(student)
+      .subscribe(this::showStudentList,
+        throwable -> Log.e(TAG, "addStudentToDatabase: ", throwable));
   }
 
   @Override

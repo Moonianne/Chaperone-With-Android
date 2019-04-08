@@ -21,14 +21,14 @@ import org.pursuit.school_trip_assistant.view.OnFragmentInteractionListener;
 import java.util.Collections;
 import java.util.List;
 
-public class StudentListFragment extends Fragment
+public final class StudentListFragment extends Fragment
   implements ItemClickListener, DataReceiveListener {
   private final StudentAdapter studentAdapter;
 
   private OnFragmentInteractionListener listener;
 
   public StudentListFragment() {
-    studentAdapter = new StudentAdapter(this, Collections.EMPTY_LIST);
+    studentAdapter = new StudentAdapter(this, Collections.emptyList());
   }
 
   public static StudentListFragment newInstance() {
