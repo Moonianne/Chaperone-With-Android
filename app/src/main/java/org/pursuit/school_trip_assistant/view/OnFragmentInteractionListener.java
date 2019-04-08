@@ -9,9 +9,15 @@ public interface OnFragmentInteractionListener {
 
   void finishSplashScreen(Fragment fragment);
 
+  void showInputFragment();
+
   void closeFragment(Fragment fragment);
 
   String getStudentFullName(int iD);
 
   String getEmergencyContact(int iD);
+
+  void showStudentList();
+
+  void showStudentInformation(int iD);
 }

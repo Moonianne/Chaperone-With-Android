@@ -2,12 +2,10 @@ package org.pursuit.school_trip_assistant.view;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.model.Student;
@@ -15,46 +13,44 @@ import org.pursuit.school_trip_assistant.view.fragment.DisplayStudentFragment;
 import org.pursuit.school_trip_assistant.view.fragment.InputStudentFragment;
 import org.pursuit.school_trip_assistant.view.fragment.SplashFragment;
 import org.pursuit.school_trip_assistant.view.fragment.input_trip_details.TripInputFragment;
-import org.pursuit.school_trip_assistant.view.recyclerview.StudentAdapter;
+import org.pursuit.school_trip_assistant.view.fragment.recyclerview.DataReceiveListener;
+import org.pursuit.school_trip_assistant.view.fragment.recyclerview.StudentListFragment;
 import org.pursuit.school_trip_assistant.viewmodel.StudentsViewModel;
 import org.pursuit.school_trip_assistant.viewmodel.ViewModelFactory;
 
-import java.util.Collections;
+import io.reactivex.disposables.Disposable;
 
-public final class StudentListActivity extends AppCompatActivity
-  implements OnFragmentInteractionListener, ItemClickListener {
+public final class HostActivity extends AppCompatActivity
+  implements OnFragmentInteractionListener {
 
-  private final StudentAdapter studentAdapter =
-    new StudentAdapter(this, Collections.EMPTY_LIST);
+  private static final String TAG = "HostActivity.TAG";
 
-  //    private StudentsViewModel viewModel;
   private StudentsViewModel testViewModel;
+  private DataReceiveListener dataReceiveListener;
+  private Disposable disposable;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_student_list);
+    setContentView(R.layout.activity_host);
+
     inflateFragment(SplashFragment.newInstance());
-
     setSupportActionBar(findViewById(R.id.toolbar));
-    setFabListener(findViewById(R.id.fab));
+    testViewModel = ViewModelProviders.of(
+      this, new ViewModelFactory(this)).get(StudentsViewModel.class);
+  }
 
-//        viewModel = new StudentsViewModel(this);
-    RecyclerView recyclerView = findViewById(R.id.recycyler_student_list);
-    recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    recyclerView.setAdapter(studentAdapter);
-    testViewModel = ViewModelProviders.of(this, new ViewModelFactory(this)).get(StudentsViewModel.class);
-    testViewModel.getStudentList().observe(this, students -> studentAdapter.setData(students));
-//        studentAdapter.setData(viewModel.getStudentsFromDatabase());
+  @Override
+  protected void onDestroy() {
+    disposable.dispose();
+    super.onDestroy();
   }
 
   @Override
   public void addStudentToDatabase(Student student, Fragment fragment) {
-    testViewModel.addStudentToDatabase(student)
-      .subscribe(() -> closeFragment(fragment),
-        throwable -> {
-        });
-//        studentAdapter.setData(testViewModel.getStudentsFromDatabase());
+    disposable = testViewModel.addStudentToDatabase(student)
+      .subscribe(this::showStudentList,
+        throwable -> Log.e(TAG, "addStudentToDatabase: ", throwable));
   }
 
   @Override
@@ -74,6 +70,15 @@ public final class StudentListActivity extends AppCompatActivity
   }
 
   @Override
+  public void showStudentList() {
+    StudentListFragment listFragment = StudentListFragment.newInstance();
+    dataReceiveListener = (DataReceiveListener) listFragment;
+    inflateFragment(listFragment);
+    testViewModel.getStudentList().observe(
+      this, students -> dataReceiveListener.onNewDataReceived(students));
+  }
+
+  @Override
   public void showStudentInformation(int iD) {
     inflateFragment(DisplayStudentFragment.newInstance(iD), true);
   }
@@ -86,11 +91,7 @@ public final class StudentListActivity extends AppCompatActivity
       .commit();
   }
 
-  private void setFabListener(FloatingActionButton fab) {
-    fab.setOnClickListener(view -> showInputFragment());
-  }
-
-  private void showInputFragment() {
+  public void showInputFragment() {
     inflateFragment(InputStudentFragment.newInstance(), true);
   }
 

@@ -37,8 +37,8 @@ public final class TripInputFragment extends Fragment
   private static final String DEST_PREFS = "DESTINATION";
   private static final String START_PREFS = "START_TIME";
   private static final String END_PREFS = "END_TIME";
-  private static final long DEBOUNCE = 300; 
   private static final String TAG = "TripInputFrag.TAG";
+  private static final long DEBOUNCE = 300;
 
   private OnFragmentInteractionListener onFragmentInteractionListener;
   private SharedPreferences sharedPreferences;
@@ -105,13 +105,16 @@ public final class TripInputFragment extends Fragment
 
   @Override
   public void onTimePick() {
-    startTime.setText(sharedPreferences.getString(START_PREFS, "12:00 AM"));
-    endTime.setText(sharedPreferences.getString(END_PREFS, "12:00 AM"));
+    startTime.setText(sharedPreferences
+      .getString(START_PREFS, "12:00 AM"));
+    endTime.setText(sharedPreferences
+      .getString(END_PREFS, "12:00 AM"));
   }
 
   @Override
   public void onDatePick() {
-    dateSelect.setText(sharedPreferences.getString(DatePickerFragment.DATE_PREFS, "Mon, Apr 1, 2019"));
+    dateSelect.setText(sharedPreferences
+      .getString(DatePickerFragment.DATE_PREFS, "Mon, Apr 1, 2019"));
   }
 
   private void setupViewStreams() {
@@ -127,7 +130,7 @@ public final class TripInputFragment extends Fragment
 
     disposables.add(
       RxView.clicks(startTime)
-        .map(click1 -> startTime.getId())
+        .map(click -> startTime.getId())
         .compose(timeViewIdToFragment)
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(this::showTimePicker)
@@ -149,7 +152,7 @@ public final class TripInputFragment extends Fragment
           sharedPreferences.edit()
             .putString(DEST_PREFS, destination)
             .apply();
-          onFragmentInteractionListener.closeFragment(TripInputFragment.this);
+          onFragmentInteractionListener.showStudentList();
         })
     );
   }
