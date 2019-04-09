@@ -77,7 +77,7 @@ public final class InputStudentFragment extends Fragment {
     super.onResume();
     File file = onPictureTakenListener.getCameraFile();
     if (file != null) {
-      Log.d(InputStudentFragment.class.getName(), "onStart: "+ file.getName());
+      Log.d(InputStudentFragment.class.getName(), "onStart: " + file.getName());
       Picasso.get().load(file).into(imageView);
     }
   }
@@ -100,7 +100,7 @@ public final class InputStudentFragment extends Fragment {
   private Student getInputStudent() {
     return new Student(editFirstName.getText().toString(),
       editLastName.getText().toString(),
-      editContact.getText().toString());
+      editContact.getText().toString(), image);
   }
 
   private void addStudentToDatabase(Student student) {
