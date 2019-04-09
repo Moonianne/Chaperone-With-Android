@@ -1,4 +1,4 @@
-package org.pursuit.school_trip_assistant.view.fragment.camera;
+package org.pursuit.school_trip_assistant.view.fragment.input_student;
 
 
 import android.Manifest;
@@ -44,7 +44,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.pursuit.school_trip_assistant.R;
-import org.pursuit.school_trip_assistant.view.OnFragmentInteractionListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -54,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
@@ -282,11 +282,8 @@ public final class CameraFragment extends Fragment implements View.OnClickListen
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     int randy = new Random().nextInt(999) + 1000;
-    file = new File(getActivity().getCacheDir(), "pic" + randy + ".jpg");
-    if (file.exists()) {
-      randy = new Random().nextInt(999) + 1000;
-      file = new File(getActivity().getCacheDir(), "pic" + randy + ".jpg");
-    }
+    Date date = new Date();
+    file = new File(getActivity().getCacheDir(), "pic" + date.getTime() + ".jpg");
   }
 
   @Override
@@ -737,7 +734,7 @@ public final class CameraFragment extends Fragment implements View.OnClickListen
       case R.id.picture: {
         takePicture();
         Log.d(TAG, "onClick: " + file.toString());
-        onPicureTakenListener.onPictureTaken(file, this);
+        onPicureTakenListener.onPictureTaken(file);
         break;
       }
       case R.id.info: {

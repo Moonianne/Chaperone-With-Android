@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <org.pursuit.school_trip_assistant.view.fragment.camera.AutoFitTextureView
+    <org.pursuit.school_trip_assistant.view.fragment.input_student.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

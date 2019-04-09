@@ -11,6 +11,8 @@ public interface OnFragmentInteractionListener {
 
   void showInputFragment();
 
+  void showCameraFragment();
+
   void closeFragment(Fragment fragment);
 
   String getStudentFullName(int iD);

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:padding="16dp"
-    tools:context=".view.fragment.camera.InputStudentFragment">
+    tools:context=".view.fragment.input_student.InputStudentFragment">
 
     <ImageView
         android:id="@+id/image_student"
