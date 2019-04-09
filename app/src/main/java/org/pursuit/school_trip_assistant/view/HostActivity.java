@@ -10,7 +10,7 @@ import android.util.Log;
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.model.Student;
 import org.pursuit.school_trip_assistant.view.fragment.DisplayStudentFragment;
-import org.pursuit.school_trip_assistant.view.fragment.InputStudentFragment;
+import org.pursuit.school_trip_assistant.view.fragment.camera.InputStudentFragment;
 import org.pursuit.school_trip_assistant.view.fragment.SplashFragment;
 import org.pursuit.school_trip_assistant.view.fragment.input_trip_details.TripInputFragment;
 import org.pursuit.school_trip_assistant.view.fragment.recyclerview.DataReceiveListener;
@@ -42,8 +42,10 @@ public final class HostActivity extends AppCompatActivity
 
   @Override
   protected void onDestroy() {
-    disposable.dispose();
+    if (disposable != null)
+      disposable.dispose();
     super.onDestroy();
+
   }
 
   @Override
