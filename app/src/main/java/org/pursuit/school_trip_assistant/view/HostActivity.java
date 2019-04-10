@@ -10,21 +10,26 @@ import android.util.Log;
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.model.Student;
 import org.pursuit.school_trip_assistant.view.fragment.DisplayStudentFragment;
-import org.pursuit.school_trip_assistant.view.fragment.InputStudentFragment;
+import org.pursuit.school_trip_assistant.view.fragment.input_student.CameraFragment;
+import org.pursuit.school_trip_assistant.view.fragment.input_student.InputStudentFragment;
 import org.pursuit.school_trip_assistant.view.fragment.SplashFragment;
+import org.pursuit.school_trip_assistant.view.fragment.input_student.OnPictureTakenListener;
 import org.pursuit.school_trip_assistant.view.fragment.input_trip_details.TripInputFragment;
 import org.pursuit.school_trip_assistant.view.fragment.recyclerview.DataReceiveListener;
 import org.pursuit.school_trip_assistant.view.fragment.recyclerview.StudentListFragment;
 import org.pursuit.school_trip_assistant.viewmodel.StudentsViewModel;
 import org.pursuit.school_trip_assistant.viewmodel.ViewModelFactory;
 
+import java.io.File;
+
 import io.reactivex.disposables.Disposable;
 
 public final class HostActivity extends AppCompatActivity
-  implements OnFragmentInteractionListener {
+  implements OnFragmentInteractionListener, OnPictureTakenListener {
 
   private static final String TAG = "HostActivity.TAG";
 
+  private File latestImage;
   private StudentsViewModel testViewModel;
   private DataReceiveListener dataReceiveListener;
   private Disposable disposable;
@@ -42,7 +47,8 @@ public final class HostActivity extends AppCompatActivity
 
   @Override
   protected void onDestroy() {
-    disposable.dispose();
+    if (disposable != null)
+      disposable.dispose();
     super.onDestroy();
   }
 
@@ -67,6 +73,11 @@ public final class HostActivity extends AppCompatActivity
   @Override
   public String getEmergencyContact(int iD) {
     return testViewModel.getEmergencyContact(iD);
+  }
+
+  @Override
+  public File getStudentImage(int iD) {
+    return testViewModel.getStudentImage(iD);
   }
 
   @Override
@@ -95,6 +106,13 @@ public final class HostActivity extends AppCompatActivity
     inflateFragment(InputStudentFragment.newInstance(), true);
   }
 
+  @Override
+  public void showCameraFragment() {
+    CameraFragment cameraFragment = new CameraFragment();
+    cameraFragment.setOnPictureTakenListener(this);
+    inflateFragment(cameraFragment, true);
+  }
+
   private void inflateFragment(Fragment fragment) {
     inflateFragment(fragment, false);
   }
@@ -105,5 +123,15 @@ public final class HostActivity extends AppCompatActivity
       .replace(R.id.fragment_container, fragment);
     if (isBackStack) fragmentTransaction.addToBackStack(null);
     fragmentTransaction.commit();
+  }
+
+  @Override
+  public void onPictureTaken(File file) {
+    latestImage = file;
+  }
+
+  @Override
+  public File getCameraFile() {
+    return latestImage;
   }
 }

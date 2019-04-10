@@ -1,4 +1,4 @@
-package org.pursuit.school_trip_assistant.view.fragment;
+package org.pursuit.school_trip_assistant.view.fragment.input_student;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,12 +14,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.jakewharton.rxbinding3.view.RxView;
+import com.squareup.picasso.Picasso;
 
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.model.Student;
 import org.pursuit.school_trip_assistant.view.OnFragmentInteractionListener;
-import org.pursuit.school_trip_assistant.view.fragment.camera.CameraFragment;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.disposables.Disposable;
@@ -29,10 +30,13 @@ public final class InputStudentFragment extends Fragment {
   private static final long DEBOUNCE_TIMEOUT = 300;
 
   private OnFragmentInteractionListener onFragmentInteractionListener;
+  private OnPictureTakenListener onPictureTakenListener;
+  private ImageView imageView;
   private EditText editLastName;
   private EditText editFirstName;
   private EditText editContact;
   private Disposable disposable;
+  private File image;
 
   public static InputStudentFragment newInstance() {
     return new InputStudentFragment();
@@ -42,6 +46,7 @@ public final class InputStudentFragment extends Fragment {
   public void onAttach(Context context) {
     super.onAttach(context);
     onFragmentInteractionListener = (OnFragmentInteractionListener) context;
+    onPictureTakenListener = (OnPictureTakenListener) context;
   }
 
   @Override
@@ -58,12 +63,24 @@ public final class InputStudentFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    ImageView imageView = view.findViewById(R.id.image_student);
+
+    imageView = view.findViewById(R.id.image_student);
     imageView.setOnClickListener(v -> takePhoto());
     editLastName = view.findViewById(R.id.edit_last_name);
     editFirstName = view.findViewById(R.id.edit_first_name);
     editContact = view.findViewById(R.id.edit_phone);
     setupSubmitButton(view);
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    File file = onPictureTakenListener.getCameraFile();
+    if (file != null) {
+      Log.d(InputStudentFragment.class.getName(), "onStart: " + file.getName());
+      Picasso.get().load(file).into(imageView);
+    }
+    image = file;
   }
 
   @Override
@@ -84,7 +101,7 @@ public final class InputStudentFragment extends Fragment {
   private Student getInputStudent() {
     return new Student(editFirstName.getText().toString(),
       editLastName.getText().toString(),
-      editContact.getText().toString());
+      editContact.getText().toString(), image);
   }
 
   private void addStudentToDatabase(Student student) {
@@ -92,12 +109,6 @@ public final class InputStudentFragment extends Fragment {
   }
 
   private void takePhoto() {
-    if (getFragmentManager() != null) {
-      getFragmentManager()
-        .beginTransaction()
-        .replace(R.id.fragment_container, CameraFragment.newInstance())
-        .addToBackStack(null)
-        .commit();
-    }
+    onFragmentInteractionListener.showCameraFragment();
   }
 }
