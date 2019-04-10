@@ -42,13 +42,15 @@ public final class StudentDatabase extends SQLiteOpenHelper {
 
   public void addStudent(Student student) {
     Cursor cursor = getReadableDatabase().rawQuery(
-      "SELECT * FROM " + TABLE_NAME + " WHERE last_name = '" + student.lastName + "' AND first_name = '" + student.firstName + "';", null);
+      "SELECT * FROM " + TABLE_NAME + " WHERE last_name = '" +
+        student.lastName + "' AND first_name = '" + student.firstName + "';", null);
     if (cursor.getCount() == 0) {
-      getWritableDatabase().execSQL("INSERT INTO " + TABLE_NAME + "(last_name, first_name, emergency_number) VALUES('" +
+      getWritableDatabase().execSQL("INSERT INTO " + TABLE_NAME +
+        "(last_name, first_name, emergency_number, image ) VALUES('" +
         student.lastName + "', '" +
         student.firstName + "', '" +
         student.ePhoneNumber + "', '" +
-        student.image + "');");
+        student.image.getAbsolutePath() + "');");
       cursor.close();
     }
     cursor.close();

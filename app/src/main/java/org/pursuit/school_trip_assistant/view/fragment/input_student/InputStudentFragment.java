@@ -80,6 +80,7 @@ public final class InputStudentFragment extends Fragment {
       Log.d(InputStudentFragment.class.getName(), "onStart: " + file.getName());
       Picasso.get().load(file).into(imageView);
     }
+    image = file;
   }
 
   @Override

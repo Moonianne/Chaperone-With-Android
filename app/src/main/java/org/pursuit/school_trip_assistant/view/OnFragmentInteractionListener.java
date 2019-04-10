@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 
 import org.pursuit.school_trip_assistant.model.Student;
 
+import java.io.File;
+
 public interface OnFragmentInteractionListener {
   void addStudentToDatabase(Student student, Fragment fragment);
 
@@ -18,6 +20,8 @@ public interface OnFragmentInteractionListener {
   String getStudentFullName(int iD);
 
   String getEmergencyContact(int iD);
+
+  File getStudentImage(int iD);
 
   void showStudentList();
 

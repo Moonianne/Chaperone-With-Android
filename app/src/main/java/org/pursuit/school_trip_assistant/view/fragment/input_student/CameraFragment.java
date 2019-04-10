@@ -682,6 +682,8 @@ public final class CameraFragment extends Fragment implements View.OnClickListen
           showToast("Saved: " + file);
           Log.d(TAG, file.toString());
           unlockFocus();
+          getFragmentManager()
+            .popBackStack();
         }
       };
 

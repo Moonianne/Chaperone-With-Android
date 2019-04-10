@@ -50,7 +50,6 @@ public final class HostActivity extends AppCompatActivity
     if (disposable != null)
       disposable.dispose();
     super.onDestroy();
-
   }
 
   @Override
@@ -74,6 +73,11 @@ public final class HostActivity extends AppCompatActivity
   @Override
   public String getEmergencyContact(int iD) {
     return testViewModel.getEmergencyContact(iD);
+  }
+
+  @Override
+  public File getStudentImage(int iD) {
+    return testViewModel.getStudentImage(iD);
   }
 
   @Override
