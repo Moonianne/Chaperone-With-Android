@@ -10,13 +10,13 @@ import android.text.format.DateFormat;
 import android.widget.TimePicker;
 
 import org.jetbrains.annotations.NotNull;
+import org.pursuit.school_trip_assistant.constants.TripPreference;
 
 import java.util.Calendar;
 
 public final class TimePickerFragment extends DialogFragment
   implements TimePickerDialog.OnTimeSetListener {
 
-  private static final String SHARED_PREFS = "ASSISTANT";
   private static final String TIME_KEY = "TIME_KEY";
   private static final String OFFSET_KEY = "OFFSET_KEY";
 
@@ -78,7 +78,8 @@ public final class TimePickerFragment extends DialogFragment
   public void setTime(String time, String timeKey) {
     if (getActivity() == null)
       throw new NullPointerException("Invoked Method on Null Activity.");
-    getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+    getActivity().getSharedPreferences(TripPreference.SHARED_PREFS,
+      Context.MODE_PRIVATE)
       .edit()
       .putString(timeKey, time)
       .apply();

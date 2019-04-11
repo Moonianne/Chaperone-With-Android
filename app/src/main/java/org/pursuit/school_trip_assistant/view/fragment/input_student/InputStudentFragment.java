@@ -17,6 +17,7 @@ import com.jakewharton.rxbinding3.view.RxView;
 import com.squareup.picasso.Picasso;
 
 import org.pursuit.school_trip_assistant.R;
+import org.pursuit.school_trip_assistant.constants.Debounce;
 import org.pursuit.school_trip_assistant.model.Student;
 import org.pursuit.school_trip_assistant.view.OnFragmentInteractionListener;
 
@@ -27,7 +28,6 @@ import io.reactivex.disposables.Disposable;
 
 public final class InputStudentFragment extends Fragment {
   private static final String TAG = "InputStudentFragmen.TAG";
-  private static final long DEBOUNCE_TIMEOUT = 300;
 
   private OnFragmentInteractionListener onFragmentInteractionListener;
   private OnPictureTakenListener onPictureTakenListener;
@@ -92,7 +92,7 @@ public final class InputStudentFragment extends Fragment {
 
   private void setupSubmitButton(@NonNull View view) {
     disposable = RxView.clicks(view.<Button>findViewById(R.id.button_submit))
-      .debounce(DEBOUNCE_TIMEOUT, TimeUnit.MILLISECONDS)
+      .debounce(Debounce.TIME, TimeUnit.MILLISECONDS)
       .map(click -> getInputStudent())
       .subscribe(this::addStudentToDatabase,
         throwable -> Log.d(TAG, "onFailure: " + throwable));

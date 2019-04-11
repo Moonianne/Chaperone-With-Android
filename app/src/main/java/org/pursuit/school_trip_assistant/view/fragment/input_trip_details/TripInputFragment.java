@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import org.pursuit.school_trip_assistant.R;
+import org.pursuit.school_trip_assistant.constants.TripPreference;
 import org.pursuit.school_trip_assistant.view.OnFragmentInteractionListener;
 
 import java.util.concurrent.TimeUnit;
@@ -33,10 +34,6 @@ public final class TripInputFragment extends Fragment
   implements TimePickerFragment.OnTimePickListener,
   DatePickerFragment.OnDatePickListener {
 
-  private static final String SHARED_PREFS = "ASSISTANT";
-  private static final String DEST_PREFS = "DESTINATION";
-  private static final String START_PREFS = "START_TIME";
-  private static final String END_PREFS = "END_TIME";
   private static final String TAG = "TripInputFrag.TAG";
   private static final long DEBOUNCE = 300;
 
@@ -85,7 +82,7 @@ public final class TripInputFragment extends Fragment
     super.onViewCreated(view, savedInstanceState);
     if (getActivity() != null) {
       sharedPreferences = getActivity().getSharedPreferences(
-        SHARED_PREFS, Context.MODE_PRIVATE);
+        TripPreference.SHARED_PREFS, Context.MODE_PRIVATE);
     }
     editTrip = view.findViewById(R.id.edit_destination);
     dateSelect = view.findViewById(R.id.date_text);
@@ -106,15 +103,15 @@ public final class TripInputFragment extends Fragment
   @Override
   public void onTimePick() {
     startTime.setText(sharedPreferences
-      .getString(START_PREFS, "12:00 AM"));
+      .getString(TripPreference.START_PREFS, "12:00 AM"));
     endTime.setText(sharedPreferences
-      .getString(END_PREFS, "12:00 AM"));
+      .getString(TripPreference.END_PREFS, "12:00 AM"));
   }
 
   @Override
   public void onDatePick() {
     dateSelect.setText(sharedPreferences
-      .getString(DatePickerFragment.DATE_PREFS, "Mon, Apr 1, 2019"));
+      .getString(TripPreference.DATE_PREFS, "Mon, Apr 1, 2019"));
   }
 
   private void setupViewStreams() {
@@ -150,7 +147,7 @@ public final class TripInputFragment extends Fragment
         .map(click -> editTrip.getText().toString())
         .subscribe(destination -> {
           sharedPreferences.edit()
-            .putString(DEST_PREFS, destination)
+            .putString(TripPreference.DEST_PREFS, destination)
             .apply();
           onFragmentInteractionListener.showStudentList();
         })
@@ -172,11 +169,11 @@ public final class TripInputFragment extends Fragment
     int hourOffSet;
     switch (iD) {
       case R.id.clickable_start_time:
-        timePrefs = START_PREFS;
+        timePrefs = TripPreference.START_PREFS;
         hourOffSet = 0;
         break;
       case R.id.clickable_end_time:
-        timePrefs = END_PREFS;
+        timePrefs = TripPreference.END_PREFS;
         hourOffSet = 4;
         break;
       default:

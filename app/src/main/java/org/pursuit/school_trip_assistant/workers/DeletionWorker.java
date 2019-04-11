@@ -1,8 +1,10 @@
-package org.pursuit.school_trip_assistant.db;
+package org.pursuit.school_trip_assistant.workers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+
+import org.pursuit.school_trip_assistant.db.StudentDatabase;
 
 import java.io.File;
 
