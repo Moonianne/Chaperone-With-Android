@@ -71,17 +71,17 @@ public final class TimePickerFragment extends DialogFragment
     String time = hourOfDayTwelveHour + ":" +
       ((minute < 10) ? "0" + minute : minute) +
       ((hourOfDay >= 12) ? " PM" : " AM");
-    setTime(time, timePrefs);
+    setTime(time);
     listener.onTimePick();
   }
 
-  public void setTime(String time, String timeKey) {
+  public void setTime(String time) {
     if (getActivity() == null)
       throw new NullPointerException("Invoked Method on Null Activity.");
     getActivity().getSharedPreferences(TripPreference.SHARED_PREFS,
       Context.MODE_PRIVATE)
       .edit()
-      .putString(timeKey, time)
+      .putString(timePrefs, time)
       .apply();
   }
 

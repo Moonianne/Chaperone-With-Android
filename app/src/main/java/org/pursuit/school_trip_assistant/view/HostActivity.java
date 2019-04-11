@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import org.pursuit.school_trip_assistant.R;
+import org.pursuit.school_trip_assistant.constants.TripPreference;
 import org.pursuit.school_trip_assistant.db.StudentDatabase;
 import org.pursuit.school_trip_assistant.model.Student;
 import org.pursuit.school_trip_assistant.view.fragment.DisplayStudentFragment;
@@ -20,9 +21,13 @@ import org.pursuit.school_trip_assistant.view.fragment.recyclerview.DataReceiveL
 import org.pursuit.school_trip_assistant.view.fragment.recyclerview.StudentListFragment;
 import org.pursuit.school_trip_assistant.viewmodel.StudentsViewModel;
 import org.pursuit.school_trip_assistant.viewmodel.ViewModelFactory;
+import org.pursuit.school_trip_assistant.workers.DeletionWorker;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 import io.reactivex.disposables.Disposable;
 
 public final class HostActivity extends AppCompatActivity
@@ -44,11 +49,6 @@ public final class HostActivity extends AppCompatActivity
     setSupportActionBar(findViewById(R.id.toolbar));
     testViewModel = ViewModelProviders.of(
       this, new ViewModelFactory(this)).get(StudentsViewModel.class);
-
-//    OneTimeWorkRequest imageDeleteWorker = new OneTimeWorkRequest.Builder(DeletionWorker.class)
-////      .setInitialDelay(1000L, TimeUnit.MILLISECONDS)
-////      .build();
-////    WorkManager.getInstance().enqueue(imageDeleteWorker);
   }
 
   @Override
@@ -88,11 +88,19 @@ public final class HostActivity extends AppCompatActivity
 
   @Override
   public void showStudentList() {
+    scheduleDataDeletion();
     StudentListFragment listFragment = StudentListFragment.newInstance();
     dataReceiveListener = (DataReceiveListener) listFragment;
     inflateFragment(listFragment);
     testViewModel.getStudentList().observe(
       this, students -> dataReceiveListener.onNewDataReceived(students));
+  }
+
+  private void scheduleDataDeletion() {
+    OneTimeWorkRequest imageDeleteWorker = new OneTimeWorkRequest.Builder(DeletionWorker.class)
+      .setInitialDelay(1000L, TimeUnit.MINUTES)
+      .build();
+    WorkManager.getInstance().enqueue(imageDeleteWorker);
   }
 
   @Override
