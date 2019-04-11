@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import org.pursuit.school_trip_assistant.R;
+import org.pursuit.school_trip_assistant.db.StudentDatabase;
 import org.pursuit.school_trip_assistant.model.Student;
 import org.pursuit.school_trip_assistant.view.fragment.DisplayStudentFragment;
 import org.pursuit.school_trip_assistant.view.fragment.input_student.CameraFragment;
@@ -43,6 +44,11 @@ public final class HostActivity extends AppCompatActivity
     setSupportActionBar(findViewById(R.id.toolbar));
     testViewModel = ViewModelProviders.of(
       this, new ViewModelFactory(this)).get(StudentsViewModel.class);
+
+//    OneTimeWorkRequest imageDeleteWorker = new OneTimeWorkRequest.Builder(DeletionWorker.class)
+////      .setInitialDelay(1000L, TimeUnit.MILLISECONDS)
+////      .build();
+////    WorkManager.getInstance().enqueue(imageDeleteWorker);
   }
 
   @Override
@@ -134,4 +140,6 @@ public final class HostActivity extends AppCompatActivity
   public File getCameraFile() {
     return latestImage;
   }
+
+
 }
