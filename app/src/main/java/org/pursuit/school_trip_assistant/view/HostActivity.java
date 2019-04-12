@@ -1,6 +1,7 @@
 package org.pursuit.school_trip_assistant.view;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -9,7 +10,6 @@ import android.util.Log;
 
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.constants.TripPreference;
-import org.pursuit.school_trip_assistant.db.StudentDatabase;
 import org.pursuit.school_trip_assistant.model.Student;
 import org.pursuit.school_trip_assistant.view.fragment.DisplayStudentFragment;
 import org.pursuit.school_trip_assistant.view.fragment.input_student.CameraFragment;
@@ -24,6 +24,8 @@ import org.pursuit.school_trip_assistant.viewmodel.ViewModelFactory;
 import org.pursuit.school_trip_assistant.workers.DeletionWorker;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import androidx.work.OneTimeWorkRequest;
@@ -68,7 +70,12 @@ public final class HostActivity extends AppCompatActivity
   @Override
   public void finishSplashScreen(Fragment fragment) {
     closeFragment(fragment);
-    inflateFragment(TripInputFragment.newInstance());
+    if (!getSharedPreferences(
+      TripPreference.SHARED_PREFS, MODE_PRIVATE).contains(TripPreference.DEST_PREFS)) {
+      inflateFragment(TripInputFragment.newInstance());
+    } else {
+      showStudentList();
+    }
   }
 
   @Override
@@ -88,19 +95,12 @@ public final class HostActivity extends AppCompatActivity
 
   @Override
   public void showStudentList() {
-    scheduleDataDeletion();
     StudentListFragment listFragment = StudentListFragment.newInstance();
     dataReceiveListener = (DataReceiveListener) listFragment;
     inflateFragment(listFragment);
     testViewModel.getStudentList().observe(
       this, students -> dataReceiveListener.onNewDataReceived(students));
-  }
-
-  private void scheduleDataDeletion() {
-    OneTimeWorkRequest imageDeleteWorker = new OneTimeWorkRequest.Builder(DeletionWorker.class)
-      .setInitialDelay(1000L, TimeUnit.MINUTES)
-      .build();
-    WorkManager.getInstance().enqueue(imageDeleteWorker);
+    scheduleDataDeletion();
   }
 
   @Override
@@ -116,15 +116,25 @@ public final class HostActivity extends AppCompatActivity
       .commit();
   }
 
-  public void showInputFragment() {
-    inflateFragment(InputStudentFragment.newInstance(), true);
-  }
-
   @Override
   public void showCameraFragment() {
     CameraFragment cameraFragment = new CameraFragment();
     cameraFragment.setOnPictureTakenListener(this);
     inflateFragment(cameraFragment, true);
+  }
+
+  @Override
+  public void onPictureTaken(File file) {
+    latestImage = file;
+  }
+
+  @Override
+  public File getCameraFile() {
+    return latestImage;
+  }
+
+  public void showInputFragment() {
+    inflateFragment(InputStudentFragment.newInstance(), true);
   }
 
   private void inflateFragment(Fragment fragment) {
@@ -139,15 +149,15 @@ public final class HostActivity extends AppCompatActivity
     fragmentTransaction.commit();
   }
 
-  @Override
-  public void onPictureTaken(File file) {
-    latestImage = file;
+  private void scheduleDataDeletion() {
+    SharedPreferences sharedPreferences = getSharedPreferences(TripPreference
+      .SHARED_PREFS, MODE_PRIVATE);
+    long currentTimeMillis = System.currentTimeMillis();
+    long tripEndTimeInMillis = sharedPreferences
+      .getLong(TripPreference.END_PREFS_MILLIS, 0);
+    Log.d(TAG, "scheduleDataDeletion: " + (tripEndTimeInMillis - currentTimeMillis));
+    WorkManager.getInstance().enqueue(new OneTimeWorkRequest.Builder(DeletionWorker.class)
+      .setInitialDelay(tripEndTimeInMillis - currentTimeMillis, TimeUnit.MILLISECONDS)
+      .build());
   }
-
-  @Override
-  public File getCameraFile() {
-    return latestImage;
-  }
-
-
 }

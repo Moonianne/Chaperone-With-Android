@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.button.MaterialButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +21,17 @@ import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.constants.TripPreference;
 import org.pursuit.school_trip_assistant.view.OnFragmentInteractionListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import kotlin.Unit;
 
 public final class TripInputFragment extends Fragment
   implements TimePickerFragment.OnTimePickListener,
@@ -40,6 +43,7 @@ public final class TripInputFragment extends Fragment
   private OnFragmentInteractionListener onFragmentInteractionListener;
   private SharedPreferences sharedPreferences;
   private CompositeDisposable disposables = new CompositeDisposable();
+  private String currentDate;
   private EditText editTrip;
   private TextView dateSelect;
   private TextView startTime;
@@ -69,6 +73,9 @@ public final class TripInputFragment extends Fragment
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Date date = new Date();
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d, yyyy", Locale.US);
+    currentDate = simpleDateFormat.format(date);
   }
 
   @Override
@@ -86,6 +93,7 @@ public final class TripInputFragment extends Fragment
     }
     editTrip = view.findViewById(R.id.edit_destination);
     dateSelect = view.findViewById(R.id.date_text);
+    dateSelect.setText(currentDate);
     startTime = view.findViewById(R.id.clickable_start_time);
     endTime = view.findViewById(R.id.clickable_end_time);
     doneButton = view.findViewById(R.id.click_done);
@@ -103,9 +111,9 @@ public final class TripInputFragment extends Fragment
   @Override
   public void onTimePick() {
     startTime.setText(sharedPreferences
-      .getString(TripPreference.START_PREFS, "12:00 AM"));
+      .getString(TripPreference.START_PREFS_TIME, "12:00 AM"));
     endTime.setText(sharedPreferences
-      .getString(TripPreference.END_PREFS, "12:00 AM"));
+      .getString(TripPreference.END_PREFS_TIME, "12:00 AM"));
   }
 
   @Override
@@ -166,19 +174,22 @@ public final class TripInputFragment extends Fragment
 
   private TimePickerFragment getTimePicker(Integer iD) {
     String timePrefs;
+    String minutePrefs;
     int hourOffSet;
     switch (iD) {
       case R.id.clickable_start_time:
-        timePrefs = TripPreference.START_PREFS;
+        timePrefs = TripPreference.START_PREFS_TIME;
+        minutePrefs = TripPreference.START_PREFS_MILLIS;
         hourOffSet = 0;
         break;
       case R.id.clickable_end_time:
-        timePrefs = TripPreference.END_PREFS;
+        timePrefs = TripPreference.END_PREFS_TIME;
+        minutePrefs = TripPreference.END_PREFS_MILLIS;
         hourOffSet = 4;
         break;
       default:
         throw new RuntimeException("View ID not found.");
     }
-    return TimePickerFragment.newInstance(timePrefs, hourOffSet);
+    return TimePickerFragment.newInstance(timePrefs, minutePrefs, hourOffSet);
   }
 }
