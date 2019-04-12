@@ -281,7 +281,6 @@ public final class CameraFragment extends Fragment implements View.OnClickListen
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    int randy = new Random().nextInt(999) + 1000;
     Date date = new Date();
     file = new File(getActivity().getCacheDir(), "pic" + date.getTime() + ".jpg");
   }

@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.LinkedList;
 
 public final class StudentDatabase extends SQLiteOpenHelper {
-  private static final String DATABASE_NAME = "STUDENT_DATABASE.db";
+  public static final String DATABASE_NAME = "STUDENT_DATABASE.db";
   private static final String TABLE_NAME = "Students";
   private static final int SCHEMA_VERSION = 1;
   private static StudentDatabase instance;
@@ -92,5 +92,9 @@ public final class StudentDatabase extends SQLiteOpenHelper {
       cursor.close();
     }
     return studentList;
+  }
+
+  public boolean deleteAll(Context context) {
+    return context.deleteDatabase(DATABASE_NAME);
   }
 }

@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import org.pursuit.school_trip_assistant.R;
+import org.pursuit.school_trip_assistant.constants.Debounce;
 import org.pursuit.school_trip_assistant.model.Student;
 
 import java.util.concurrent.TimeUnit;
@@ -15,8 +16,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.disposables.Disposable;
 
 final class StudentViewHolder extends RecyclerView.ViewHolder {
-  private static final long DEBOUNCE_TIMEOUT = 300;
-
   private Disposable disposable;
 
   StudentViewHolder(@NonNull View itemView) {
@@ -29,7 +28,7 @@ final class StudentViewHolder extends RecyclerView.ViewHolder {
     textView.setText(studentFullName);
 
     disposable = RxView.clicks(itemView)
-      .debounce(DEBOUNCE_TIMEOUT, TimeUnit.MILLISECONDS)
+      .debounce(Debounce.TIME, TimeUnit.MILLISECONDS)
       .subscribe(click -> onClick(itemClickListener, student.iD));
   }
 

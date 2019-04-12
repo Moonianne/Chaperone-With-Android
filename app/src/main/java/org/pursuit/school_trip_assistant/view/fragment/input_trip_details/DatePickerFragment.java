@@ -8,6 +8,8 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.widget.DatePicker;
 
+import org.pursuit.school_trip_assistant.constants.TripPreference;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -19,8 +21,6 @@ public final class DatePickerFragment extends DialogFragment
     , "Jun", "Jul", "Aug", "Sep", "Nov", "Dec"};
   private static final String[] DAY = {"Sat", "Sun", "Mon", "Tues", "Wed",
     "Thurs", "Fri"};
-  private static final String SHARED_PREFS = "ASSISTANT";
-  public static final String DATE_PREFS = "DATE";
 
   private final Calendar calendar;
   private OnDatePickListener listener;
@@ -50,9 +50,9 @@ public final class DatePickerFragment extends DialogFragment
   private void setDate(String date) {
     if (getActivity() == null)
       throw new NullPointerException("Invoked Method on Null Activity.");
-    getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+    getActivity().getSharedPreferences(TripPreference.SHARED_PREFS, Context.MODE_PRIVATE)
       .edit()
-      .putString(DATE_PREFS, date)
+      .putString(TripPreference.DATE_PREFS, date)
       .apply();
   }
 
