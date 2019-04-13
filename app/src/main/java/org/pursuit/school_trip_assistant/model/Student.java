@@ -1,6 +1,5 @@
 package org.pursuit.school_trip_assistant.model;
 
-import android.support.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
 
