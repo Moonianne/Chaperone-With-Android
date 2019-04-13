@@ -1,12 +1,20 @@
 package org.pursuit.school_trip_assistant.view;
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import org.pursuit.school_trip_assistant.R;
 import org.pursuit.school_trip_assistant.constants.TripPreference;
@@ -50,10 +58,13 @@ public final class HostActivity extends AppCompatActivity
 
     sharedPreferences = getSharedPreferences(TripPreference.SHARED_PREFS, MODE_PRIVATE);
     inflateFragment(SplashFragment.newInstance());
-    setSupportActionBar(findViewById(R.id.toolbar));
     studentViewModel = ViewModelProviders.of(
       this, new ViewModelFactory(this)).get(StudentsViewModel.class);
     tripViewModel = ViewModelProviders.of(this).get(TripViewModel.class);
+
+    Toolbar toolBar = findViewById(R.id.toolbar);
+    setSupportActionBar(toolBar);
+    ActionBar actionBar = getSupportActionBar();
   }
 
   @Override
@@ -61,6 +72,23 @@ public final class HostActivity extends AppCompatActivity
     if (disposable != null)
       disposable.dispose();
     super.onDestroy();
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.toolbar_menu, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.tool_about:
+        getAboutDialog().show();
+        break;
+    }
+    return true;
   }
 
   @Override
@@ -195,5 +223,27 @@ public final class HostActivity extends AppCompatActivity
       .setInitialDelay(
         tripViewModel.getTripEndTimeInMillis() - currentTimeMillis, TimeUnit.MILLISECONDS)
       .build());
+  }
+
+  public AlertDialog getAboutDialog() {
+    AlertDialog.Builder aboutDialog = new AlertDialog.Builder(this);
+    aboutDialog.setTitle(R.string.findoutmore)
+      .setItems(R.array.links_array, (dialog, item) -> {
+        switch (item) {
+          case 0:
+            startActivity(new Intent(Intent.ACTION_VIEW,
+              Uri.parse(getString(R.string.repo))));
+            break;
+          case 1:
+            startActivity(new Intent(Intent.ACTION_VIEW,
+              Uri.parse(getString(R.string.linkedIn))));
+            break;
+          case 2:
+            startActivity(new Intent(Intent.ACTION_VIEW,
+              Uri.parse(getString(R.string.twitter_link))));
+            break;
+        }
+      });
+    return aboutDialog.create();
   }
 }
