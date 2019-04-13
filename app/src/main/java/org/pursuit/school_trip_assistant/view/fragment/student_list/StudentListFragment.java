@@ -1,4 +1,4 @@
-package org.pursuit.school_trip_assistant.view.fragment.recyclerview;
+package org.pursuit.school_trip_assistant.view.fragment.student_list;
 
 
 import android.content.Context;

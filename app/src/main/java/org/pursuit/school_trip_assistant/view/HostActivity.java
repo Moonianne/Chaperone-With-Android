@@ -25,8 +25,8 @@ import org.pursuit.school_trip_assistant.view.fragment.input_student.InputStuden
 import org.pursuit.school_trip_assistant.view.fragment.SplashFragment;
 import org.pursuit.school_trip_assistant.view.fragment.input_student.OnPictureTakenListener;
 import org.pursuit.school_trip_assistant.view.fragment.input_trip_details.TripInputFragment;
-import org.pursuit.school_trip_assistant.view.fragment.recyclerview.DataReceiveListener;
-import org.pursuit.school_trip_assistant.view.fragment.recyclerview.StudentListFragment;
+import org.pursuit.school_trip_assistant.view.fragment.student_list.DataReceiveListener;
+import org.pursuit.school_trip_assistant.view.fragment.student_list.StudentListFragment;
 import org.pursuit.school_trip_assistant.viewmodel.StudentsViewModel;
 import org.pursuit.school_trip_assistant.viewmodel.TripViewModel;
 import org.pursuit.school_trip_assistant.viewmodel.ViewModelFactory;
@@ -208,6 +208,7 @@ public final class HostActivity extends AppCompatActivity
 
   @Override
   public void showStudentInputFragment() {
+    latestImage = null;
     inflateFragment(InputStudentFragment.newInstance(null), true);
   }
 
