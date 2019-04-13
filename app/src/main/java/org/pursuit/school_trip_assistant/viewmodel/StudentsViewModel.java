@@ -13,9 +13,6 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
 
 public final class StudentsViewModel extends ViewModel {
   private final StudentDatabase studentDatabase;
