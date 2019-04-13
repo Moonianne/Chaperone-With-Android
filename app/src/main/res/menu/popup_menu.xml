@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/link_one"
+        android:title="@string/chaperone_repo" />
+
+    <item
+        android:id="@+id/link_two"
+        android:title="@string/my_linkedin" />
+
+    <item
+        android:id="@+id/link_three"
+        android:title="@string/twitter" />
+
+</menu>
