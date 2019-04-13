@@ -20,12 +20,11 @@ import org.pursuit.school_trip_assistant.view.fragment.input_trip_details.TripIn
 import org.pursuit.school_trip_assistant.view.fragment.recyclerview.DataReceiveListener;
 import org.pursuit.school_trip_assistant.view.fragment.recyclerview.StudentListFragment;
 import org.pursuit.school_trip_assistant.viewmodel.StudentsViewModel;
+import org.pursuit.school_trip_assistant.viewmodel.TripViewModel;
 import org.pursuit.school_trip_assistant.viewmodel.ViewModelFactory;
 import org.pursuit.school_trip_assistant.workers.DeletionWorker;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import androidx.work.OneTimeWorkRequest;
@@ -37,8 +36,10 @@ public final class HostActivity extends AppCompatActivity
 
   private static final String TAG = "HostActivity.TAG";
 
+  private SharedPreferences sharedPreferences;
   private File latestImage;
-  private StudentsViewModel testViewModel;
+  private StudentsViewModel studentViewModel;
+  private TripViewModel tripViewModel;
   private DataReceiveListener dataReceiveListener;
   private Disposable disposable;
 
@@ -47,10 +48,12 @@ public final class HostActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_host);
 
+    sharedPreferences = getSharedPreferences(TripPreference.SHARED_PREFS, MODE_PRIVATE);
     inflateFragment(SplashFragment.newInstance());
     setSupportActionBar(findViewById(R.id.toolbar));
-    testViewModel = ViewModelProviders.of(
+    studentViewModel = ViewModelProviders.of(
       this, new ViewModelFactory(this)).get(StudentsViewModel.class);
+    tripViewModel = ViewModelProviders.of(this).get(TripViewModel.class);
   }
 
   @Override
@@ -62,7 +65,7 @@ public final class HostActivity extends AppCompatActivity
 
   @Override
   public void addStudentToDatabase(Student student, Fragment fragment) {
-    disposable = testViewModel.addStudentToDatabase(student)
+    disposable = studentViewModel.addStudentToDatabase(student)
       .subscribe(this::showStudentList,
         throwable -> Log.e(TAG, "addStudentToDatabase: ", throwable));
   }
@@ -80,17 +83,17 @@ public final class HostActivity extends AppCompatActivity
 
   @Override
   public String getStudentFullName(int iD) {
-    return testViewModel.getStudentLastNameFirstName(iD);
+    return studentViewModel.getStudentLastNameFirstName(iD);
   }
 
   @Override
   public String getEmergencyContact(int iD) {
-    return testViewModel.getEmergencyContact(iD);
+    return studentViewModel.getEmergencyContact(iD);
   }
 
   @Override
   public File getStudentImage(int iD) {
-    return testViewModel.getStudentImage(iD);
+    return studentViewModel.getStudentImage(iD);
   }
 
   @Override
@@ -98,7 +101,7 @@ public final class HostActivity extends AppCompatActivity
     StudentListFragment listFragment = StudentListFragment.newInstance();
     dataReceiveListener = (DataReceiveListener) listFragment;
     inflateFragment(listFragment);
-    testViewModel.getStudentList().observe(
+    studentViewModel.getStudentList().observe(
       this, students -> dataReceiveListener.onNewDataReceived(students));
     scheduleDataDeletion();
   }
@@ -106,6 +109,42 @@ public final class HostActivity extends AppCompatActivity
   @Override
   public void showStudentInformation(int iD) {
     inflateFragment(DisplayStudentFragment.newInstance(iD), true);
+  }
+
+  @Override
+  public void setTime(String prefs, int hourOfDay, int minute) {
+    switch (prefs) {
+      case TripPreference.START_PREFS_TIME:
+        tripViewModel.setStartTime(hourOfDay, minute);
+        sharedPreferences.edit().putLong(TripPreference.START_PREFS_TIME,
+          tripViewModel.getTripStartTimeInMillis()).apply();
+        break;
+      case TripPreference.END_PREFS_TIME:
+        tripViewModel.setEndTime(hourOfDay, minute);
+        sharedPreferences.edit().putLong(TripPreference.END_PREFS_TIME,
+          tripViewModel.getTripEndTimeInMillis()).apply();
+        break;
+      default:
+        throw new RuntimeException("No Match To Time Preference Key.");
+    }
+  }
+
+  @Override
+  public void setDate(int year, int month, int day) {
+    tripViewModel.setDate(year, month, day);
+  }
+
+  @Override
+  public String getDate() {
+    return tripViewModel.getDatePresentable();
+  }
+
+  @Override
+  public String getTime(String timePrefs) {
+    if (timePrefs.equals(TripPreference.END_PREFS_TIME)) {
+      return tripViewModel.getEndTimePresentable();
+    }
+    return tripViewModel.getStartTimePresentable();
   }
 
   @Override
@@ -150,14 +189,11 @@ public final class HostActivity extends AppCompatActivity
   }
 
   private void scheduleDataDeletion() {
-    SharedPreferences sharedPreferences = getSharedPreferences(TripPreference
-      .SHARED_PREFS, MODE_PRIVATE);
     long currentTimeMillis = System.currentTimeMillis();
-    long tripEndTimeInMillis = sharedPreferences
-      .getLong(TripPreference.END_PREFS_MILLIS, 0);
-    Log.d(TAG, "scheduleDataDeletion: " + (tripEndTimeInMillis - currentTimeMillis));
+    Log.d(TAG, "scheduleDataDeletion: " + (tripViewModel.getTripEndTimeInMillis() - currentTimeMillis));
     WorkManager.getInstance().enqueue(new OneTimeWorkRequest.Builder(DeletionWorker.class)
-      .setInitialDelay(tripEndTimeInMillis - currentTimeMillis, TimeUnit.MILLISECONDS)
+      .setInitialDelay(
+        tripViewModel.getTripEndTimeInMillis() - currentTimeMillis, TimeUnit.MILLISECONDS)
       .build());
   }
 }

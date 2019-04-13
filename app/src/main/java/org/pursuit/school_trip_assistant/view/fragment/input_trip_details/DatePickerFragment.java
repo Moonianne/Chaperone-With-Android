@@ -5,28 +5,32 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.widget.DatePicker;
 
-import org.pursuit.school_trip_assistant.constants.TripPreference;
+import org.pursuit.school_trip_assistant.view.OnFragmentInteractionListener;
 
 import java.util.Calendar;
-import java.util.Date;
 
 
 public final class DatePickerFragment extends DialogFragment
   implements DatePickerDialog.OnDateSetListener {
 
-  private static final String[] MONTH = {"Jan", "Feb", "Mar", "Apr", "May"
-    , "Jun", "Jul", "Aug", "Sep", "Nov", "Dec"};
-  private static final String[] DAY = {"Sat", "Sun", "Mon", "Tues", "Wed",
-    "Thurs", "Fri"};
-
   private final Calendar calendar;
-  private OnDatePickListener listener;
+  private OnFragmentInteractionListener onFragmentInteractionListener;
+  private OnDatePickListener onDatePickListener;
 
   public DatePickerFragment() {
     calendar = Calendar.getInstance();
+  }
+
+  @Override
+  public void onAttach(Context context) {
+    super.onAttach(context);
+    if (context instanceof OnFragmentInteractionListener) {
+      onFragmentInteractionListener = (OnFragmentInteractionListener) context;
+    } else {
+      throw new RuntimeException("Must Implement OnFragmentInteractionListener in Host Activity.");
+    }
   }
 
   @Override
@@ -38,35 +42,14 @@ public final class DatePickerFragment extends DialogFragment
     return new DatePickerDialog(getActivity(), this, year, month, day);
   }
 
+  @Override
   public void onDateSet(DatePicker view, int year, int month, int day) {
-    Date newDate = new Date(year, month, day);
-    calendar.setTime(newDate);
-    String date = getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK))
-      + " " + getMonth(month) + ", " + day + ", " + year;
-    setDate(date);
-    listener.onDatePick();
-  }
-
-  private void setDate(String date) {
-    if (getActivity() == null)
-      throw new NullPointerException("Invoked Method on Null Activity.");
-    getActivity().getSharedPreferences(TripPreference.SHARED_PREFS, Context.MODE_PRIVATE)
-      .edit()
-      .putString(TripPreference.DATE_PREFS, date)
-      .apply();
-  }
-
-  private String getDayOfWeek(int i) {
-    Log.d("getDayOfWeek", "getDayOfWeek: " + i);
-    return DAY[i - 1];
-  }
-
-  private String getMonth(int i) {
-    return MONTH[i];
+    onFragmentInteractionListener.setDate(year, month, day);
+    onDatePickListener.onDatePick();
   }
 
   public void setOnDatePickListener(OnDatePickListener listener) {
-    this.listener = listener;
+    this.onDatePickListener = listener;
   }
 
   interface OnDatePickListener {

@@ -109,17 +109,18 @@ public final class TripInputFragment extends Fragment
   }
 
   @Override
-  public void onTimePick() {
-    startTime.setText(sharedPreferences
-      .getString(TripPreference.START_PREFS_TIME, "12:00 AM"));
-    endTime.setText(sharedPreferences
-      .getString(TripPreference.END_PREFS_TIME, "12:00 AM"));
+  public void onTimePick(String timePrefs) {
+    String timeInput = onFragmentInteractionListener.getTime(timePrefs);
+    if (timePrefs.equals(TripPreference.END_PREFS_TIME)) {
+      endTime.setText(timeInput);
+    } else {
+      startTime.setText(timeInput);
+    }
   }
 
   @Override
   public void onDatePick() {
-    dateSelect.setText(sharedPreferences
-      .getString(TripPreference.DATE_PREFS, "Mon, Apr 1, 2019"));
+    dateSelect.setText(onFragmentInteractionListener.getDate());
   }
 
   private void setupViewStreams() {
@@ -174,22 +175,19 @@ public final class TripInputFragment extends Fragment
 
   private TimePickerFragment getTimePicker(Integer iD) {
     String timePrefs;
-    String minutePrefs;
     int hourOffSet;
     switch (iD) {
       case R.id.clickable_start_time:
         timePrefs = TripPreference.START_PREFS_TIME;
-        minutePrefs = TripPreference.START_PREFS_MILLIS;
         hourOffSet = 0;
         break;
       case R.id.clickable_end_time:
         timePrefs = TripPreference.END_PREFS_TIME;
-        minutePrefs = TripPreference.END_PREFS_MILLIS;
         hourOffSet = 4;
         break;
       default:
         throw new RuntimeException("View ID not found.");
     }
-    return TimePickerFragment.newInstance(timePrefs, minutePrefs, hourOffSet);
+    return TimePickerFragment.newInstance(timePrefs, hourOffSet);
   }
 }

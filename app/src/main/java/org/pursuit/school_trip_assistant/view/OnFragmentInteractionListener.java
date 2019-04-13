@@ -26,4 +26,12 @@ public interface OnFragmentInteractionListener {
   void showStudentList();
 
   void showStudentInformation(int iD);
+
+  void setTime(String prefs, int hourOfDay, int minute);
+
+  void setDate(int year, int month, int day);
+
+  String getDate();
+
+  String getTime(String timePrefs);
 }
