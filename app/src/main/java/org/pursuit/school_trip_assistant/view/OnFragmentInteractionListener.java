@@ -11,7 +11,9 @@ public interface OnFragmentInteractionListener {
 
   void finishSplashScreen(Fragment fragment);
 
-  void showInputFragment();
+  void showStudentInputFragment();
+
+  void showStudentInputFragment(Student student);
 
   void showCameraFragment();
 
@@ -34,4 +36,8 @@ public interface OnFragmentInteractionListener {
   String getDate();
 
   String getTime(String timePrefs);
+
+  void editStudent(int iD);
+
+  void scheduleDataDeletion();
 }

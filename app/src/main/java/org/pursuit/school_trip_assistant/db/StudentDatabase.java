@@ -56,6 +56,13 @@ public final class StudentDatabase extends SQLiteOpenHelper {
     cursor.close();
   }
 
+  public boolean deleteStudent(String value) {
+    SQLiteDatabase db = this.getWritableDatabase();
+    db.execSQL("DELETE FROM " + TABLE_NAME + " WHERE  _id ='" + value + "'");
+    db.close();
+    return true;
+  }
+
   public Student getStudent(int iD) {
     Student student = null;
     Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_NAME +

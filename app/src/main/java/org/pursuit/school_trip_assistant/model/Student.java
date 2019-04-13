@@ -1,5 +1,9 @@
 package org.pursuit.school_trip_assistant.model;
 
+import android.support.annotation.NonNull;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.Comparator;
 
@@ -13,7 +17,7 @@ public final class Student {
   public final File image;
   public final int iD;
 
-  public Student(String firstName, String lastName, String ePhoneNumber, File image, int iD) {
+  public Student(String firstName, String lastName, String ePhoneNumber, @NotNull File image, int iD) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.ePhoneNumber = ePhoneNumber;
