@@ -158,6 +158,7 @@ public final class TripInputFragment extends Fragment
           sharedPreferences.edit()
             .putString(TripPreference.DEST_PREFS, destination)
             .apply();
+          onFragmentInteractionListener.scheduleDataDeletion();
           onFragmentInteractionListener.showStudentList();
         })
     );

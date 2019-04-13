@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+import io.reactivex.Completable;
 import io.reactivex.disposables.Disposable;
 
 public final class HostActivity extends AppCompatActivity
@@ -131,7 +132,6 @@ public final class HostActivity extends AppCompatActivity
     inflateFragment(listFragment);
     studentViewModel.getStudentList().observe(
       this, students -> dataReceiveListener.onNewDataReceived(students));
-    scheduleDataDeletion();
   }
 
   @Override
@@ -176,6 +176,12 @@ public final class HostActivity extends AppCompatActivity
   }
 
   @Override
+  public void editStudent(int iD) {
+    Completable.fromAction(() -> showStudentInputFragment(studentViewModel.getStudent(iD)))
+      .subscribe(() -> studentViewModel.deleteStudentFromDatabase(String.valueOf(iD)));
+  }
+
+  @Override
   public void closeFragment(Fragment fragment) {
     getSupportFragmentManager()
       .beginTransaction()
@@ -200,8 +206,14 @@ public final class HostActivity extends AppCompatActivity
     return latestImage;
   }
 
-  public void showInputFragment() {
-    inflateFragment(InputStudentFragment.newInstance(), true);
+  @Override
+  public void showStudentInputFragment() {
+    inflateFragment(InputStudentFragment.newInstance(null), true);
+  }
+
+  @Override
+  public void showStudentInputFragment(Student student) {
+    inflateFragment(InputStudentFragment.newInstance(student), false);
   }
 
   private void inflateFragment(Fragment fragment) {
@@ -216,12 +228,13 @@ public final class HostActivity extends AppCompatActivity
     fragmentTransaction.commit();
   }
 
-  private void scheduleDataDeletion() {
+  @Override
+  public void scheduleDataDeletion() {
     long currentTimeMillis = System.currentTimeMillis();
     Log.d(TAG, "scheduleDataDeletion: " + (tripViewModel.getTripEndTimeInMillis() - currentTimeMillis));
     WorkManager.getInstance().enqueue(new OneTimeWorkRequest.Builder(DeletionWorker.class)
       .setInitialDelay(
-        tripViewModel.getTripEndTimeInMillis() - currentTimeMillis, TimeUnit.MILLISECONDS)
+        (tripViewModel.getTripEndTimeInMillis() - currentTimeMillis), TimeUnit.MILLISECONDS)
       .build());
   }
 

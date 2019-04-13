@@ -72,6 +72,6 @@ public final class StudentListFragment extends Fragment
   }
 
   private void setFabListener(FloatingActionButton fab) {
-    fab.setOnClickListener(view -> listener.showInputFragment());
+    fab.setOnClickListener(view -> listener.showStudentInputFragment());
   }
 }

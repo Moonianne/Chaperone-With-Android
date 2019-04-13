@@ -31,6 +31,10 @@ public final class StudentsViewModel extends ViewModel {
     });
   }
 
+  public boolean deleteStudentFromDatabase(String iD) {
+    return studentDatabase.deleteStudent(iD);
+  }
+
   public Student getStudent(int iD) {
     return studentDatabase.getStudent(iD);
   }

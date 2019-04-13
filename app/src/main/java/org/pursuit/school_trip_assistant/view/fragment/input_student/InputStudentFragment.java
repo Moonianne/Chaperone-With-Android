@@ -27,6 +27,11 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.disposables.Disposable;
 
 public final class InputStudentFragment extends Fragment {
+  private static final String IMAGE_KEY = "IMAGE";
+  private static final String FIRST_NAME_KEY = "FIRST NAME";
+  private static final String LAST_NAME_KEY = "LAST NAME";
+  private static final String CONTACT_KEY = "CONTACT";
+
   private static final String TAG = "InputStudentFragmen.TAG";
 
   private OnFragmentInteractionListener onFragmentInteractionListener;
@@ -38,8 +43,17 @@ public final class InputStudentFragment extends Fragment {
   private Disposable disposable;
   private File image;
 
-  public static InputStudentFragment newInstance() {
-    return new InputStudentFragment();
+  public static InputStudentFragment newInstance(Student student) {
+    InputStudentFragment inputStudentFragment = new InputStudentFragment();
+    if (student != null) {
+      Bundle args = new Bundle();
+      args.putString(IMAGE_KEY, student.image.getAbsolutePath());
+      args.putString(FIRST_NAME_KEY, student.firstName);
+      args.putString(LAST_NAME_KEY, student.lastName);
+      args.putString(CONTACT_KEY, student.ePhoneNumber);
+      inputStudentFragment.setArguments(args);
+    }
+    return inputStudentFragment;
   }
 
   @Override
@@ -69,6 +83,17 @@ public final class InputStudentFragment extends Fragment {
     editLastName = view.findViewById(R.id.edit_last_name);
     editFirstName = view.findViewById(R.id.edit_first_name);
     editContact = view.findViewById(R.id.edit_phone);
+
+    if (getArguments() != null) {
+      Bundle received = getArguments();
+      File file = new File(received.getString(IMAGE_KEY));
+      image = file;
+      Picasso.get().load(file).into(imageView);
+      editFirstName.setText(received.getString(FIRST_NAME_KEY));
+      editLastName.setText(received.getString(LAST_NAME_KEY));
+      editContact.setText(received.getString(CONTACT_KEY));
+    }
+
     setupSubmitButton(view);
   }
 
