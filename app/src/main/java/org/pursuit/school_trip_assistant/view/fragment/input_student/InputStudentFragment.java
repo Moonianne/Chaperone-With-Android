@@ -43,7 +43,7 @@ public final class InputStudentFragment extends Fragment {
   private Disposable disposable;
   private File image;
 
-  public static InputStudentFragment newInstance(Student student) {
+  public static InputStudentFragment newInstance(@Nullable Student student) {
     InputStudentFragment inputStudentFragment = new InputStudentFragment();
     if (student != null) {
       Bundle args = new Bundle();
