@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="links_array">
+        <item>Chaperone Repo</item>
+        <item>My LinkedIn</item>
+        <item>Follow me on Twitter</item>
+    </string-array>
+</resources>

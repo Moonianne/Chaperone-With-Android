@@ -22,4 +22,8 @@
     <string name="chaperone_repo">Chaperone Repo</string>
     <string name="my_linkedin">My LinkedIn</string>
     <string name="twitter">Follow me on Twitter</string>
+    <string name="findoutmore">Find Out More</string>
+    <string name="repo">https://github.com/Moonianne/School_Trip_Assistant</string>
+    <string name="linkedIn">https://www.linkedin.com/in/gerardo-jimenez-404514174/</string>
+    <string name="twitter_link">https://twitter.com/Geo_Geode</string>
 </resources>
