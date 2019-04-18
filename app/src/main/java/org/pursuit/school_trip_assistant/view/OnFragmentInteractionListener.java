@@ -6,6 +6,11 @@ import org.pursuit.school_trip_assistant.model.Student;
 
 import java.io.File;
 
+/**
+ * This interface should be broken up, generally activity/fragment should have specific interfaces they implement
+ * for example getStudentImage is used by DisplayStudentFragment while setTime is used in TripInputFragment these
+ * methods should exist in different interfaces
+ */
 public interface OnFragmentInteractionListener {
   void addStudentToDatabase(Student student, Fragment fragment);
 

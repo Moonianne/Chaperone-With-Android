@@ -51,9 +51,14 @@ public final class DisplayStudentFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-
-    int iD = getArguments().getInt(ID_KEY);
+    /**
+     * you should account for a null ID_KEY
+     */
+    int iD = getArguments().getInt(ID_KEY,0);
     MaterialButton materialButton = view.findViewById(R.id.edit_button);
+    /**
+     * you need to dispose of this subscription
+     */
     RxView.clicks(materialButton)
       .subscribe(click -> onFragmentInteractionListener.editStudent(iD));
     view.<TextView>findViewById(R.id.display_text_name).setText(getString(R.string.student_name,

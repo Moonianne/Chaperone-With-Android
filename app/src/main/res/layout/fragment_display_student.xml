@@ -11,14 +11,13 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+<!-- drawableTint wont work for APIs Lower than 23 your current minimum is API 21-->
         <android.support.design.button.MaterialButton
             android:id="@+id/edit_button"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="4dp"
-            android:drawableTint="@color/edit_color"
             android:textAppearance="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
             app:icon="@drawable/ic_edit_24dp"
             app:layout_constraintLeft_toLeftOf="parent"
