@@ -1,6 +1,5 @@
 package org.pursuit.school_trip_assistant.model;
 
-import android.support.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +8,7 @@ import java.util.Comparator;
 
 public final class Student {
   public static final Comparator<Student> studentComparator =
-    Student::compareStudent;
+      Student::compareStudent;
 
   public final String firstName;
   public final String lastName;

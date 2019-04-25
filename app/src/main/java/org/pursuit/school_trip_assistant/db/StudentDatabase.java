@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.LinkedList;
 
 public final class StudentDatabase extends SQLiteOpenHelper {
-  public static final String DATABASE_NAME = "STUDENT_DATABASE.db";
+  private static final String DATABASE_NAME = "STUDENT_DATABASE.db";
   private static final String TABLE_NAME = "Students";
   private static final int SCHEMA_VERSION = 1;
   private static StudentDatabase instance;
