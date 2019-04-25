@@ -8,7 +8,7 @@ import java.util.Comparator;
 
 public final class Student {
   public static final Comparator<Student> studentComparator =
-    Student::compareStudent;
+      Student::compareStudent;
 
   public final String firstName;
   public final String lastName;
