@@ -17,7 +17,7 @@ import io.reactivex.Completable;
 public final class StudentsViewModel extends ViewModel {
   private final StudentDatabase studentDatabase;
 
-  MutableLiveData<List<Student>> studentList = new MutableLiveData<>();
+  private MutableLiveData<List<Student>> studentList = new MutableLiveData<>();
 
   public StudentsViewModel(Context context) {
     this.studentDatabase = StudentDatabase.getInstance(context);

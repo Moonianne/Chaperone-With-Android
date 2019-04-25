@@ -48,6 +48,12 @@ public final class TimePickerFragment extends DialogFragment
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    /**
+     * this check should go first you cant get arguments if your activity is null
+     */
+    if (getActivity() == null) {
+      throw new NullPointerException("Invoked Method on Null Activity.");
+    }
     if (getArguments() != null) {
       Bundle receivedBundle = getArguments();
       timePrefs = receivedBundle.getString(TIME_KEY);
@@ -55,14 +61,15 @@ public final class TimePickerFragment extends DialogFragment
     } else {
       throw new RuntimeException("Did not pass data to new instance.");
     }
-    if (getActivity() == null) {
-      throw new NullPointerException("Invoked Method on Null Activity.");
-    }
+
   }
 
   @NotNull
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
+    /**
+     * If you make your variables final, you should do so throughout the whole app.
+     */
     final Calendar c = Calendar.getInstance();
     int hour = c.get(Calendar.HOUR_OF_DAY);
     int minute = c.get(Calendar.MINUTE);

@@ -59,13 +59,16 @@ public final class HostActivity extends AppCompatActivity
 
     sharedPreferences = getSharedPreferences(TripPreference.SHARED_PREFS, MODE_PRIVATE);
     inflateFragment(SplashFragment.newInstance());
-    studentViewModel = ViewModelProviders.of(
-      this, new ViewModelFactory(this)).get(StudentsViewModel.class);
+    studentViewModel = ViewModelProviders.of(this, new ViewModelFactory(this))
+            .get(StudentsViewModel.class);
+
     tripViewModel = ViewModelProviders.of(this).get(TripViewModel.class);
 
     Toolbar toolBar = findViewById(R.id.toolbar);
     setSupportActionBar(toolBar);
-    ActionBar actionBar = getSupportActionBar();
+      /**
+       * action bar is never used
+       */
   }
 
   @Override
@@ -84,11 +87,12 @@ public final class HostActivity extends AppCompatActivity
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.tool_about:
-        getAboutDialog().show();
-        break;
-    }
+      /**
+       * doesnt need to be a switch if its a single case
+       */
+      if (item.getItemId() == R.id.tool_about) {
+          getAboutDialog().show();
+      }
     return true;
   }
 
@@ -128,7 +132,10 @@ public final class HostActivity extends AppCompatActivity
   @Override
   public void showStudentList() {
     StudentListFragment listFragment = StudentListFragment.newInstance();
-    dataReceiveListener = (DataReceiveListener) listFragment;
+      /**
+       * casting is redundant since fragment implements the listener
+       */
+    dataReceiveListener = listFragment;
     inflateFragment(listFragment);
     studentViewModel.getStudentList().observe(
       this, students -> dataReceiveListener.onNewDataReceived(students));
@@ -177,6 +184,9 @@ public final class HostActivity extends AppCompatActivity
 
   @Override
   public void editStudent(int iD) {
+    /**
+     * dispose of this subscription
+     */
     Completable.fromAction(() -> showStudentInputFragment(studentViewModel.getStudent(iD)))
       .subscribe(() -> studentViewModel.deleteStudentFromDatabase(String.valueOf(iD)));
   }
@@ -206,6 +216,10 @@ public final class HostActivity extends AppCompatActivity
     return latestImage;
   }
 
+    /**
+     * you could combine this logic into one method
+     */
+
   @Override
   public void showStudentInputFragment() {
     latestImage = null;
@@ -217,6 +231,11 @@ public final class HostActivity extends AppCompatActivity
     inflateFragment(InputStudentFragment.newInstance(student), false);
   }
 
+    /**
+     * Think about renaming these methods why is the logic for inflating a fragment
+     * split accress two methods
+     * @param fragment
+     */
   private void inflateFragment(Fragment fragment) {
     inflateFragment(fragment, false);
   }
@@ -238,6 +257,7 @@ public final class HostActivity extends AppCompatActivity
         (tripViewModel.getTripEndTimeInMillis() - currentTimeMillis), TimeUnit.MILLISECONDS)
       .build());
   }
+
 
   public AlertDialog getAboutDialog() {
     AlertDialog.Builder aboutDialog = new AlertDialog.Builder(this);

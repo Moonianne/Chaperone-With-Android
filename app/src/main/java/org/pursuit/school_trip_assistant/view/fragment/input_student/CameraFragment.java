@@ -222,9 +222,11 @@ public final class CameraFragment extends Fragment implements View.OnClickListen
   };
 
   private void showToast(final String text) {
-    final Activity activity = getActivity();
-    if (activity != null) {
-      activity.runOnUiThread(() -> Toast.makeText(activity, text, Toast.LENGTH_SHORT).show());
+    /**
+     *  you dont need to save activity as a variable
+     */
+    if(getActivity() != null){
+      getActivity().runOnUiThread(() -> Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show());
     }
   }
 
