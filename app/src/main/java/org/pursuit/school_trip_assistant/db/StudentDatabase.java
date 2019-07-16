@@ -9,6 +9,7 @@ import org.pursuit.school_trip_assistant.model.Student;
 
 import java.io.File;
 import java.util.LinkedList;
+import java.util.List;
 
 public final class StudentDatabase extends SQLiteOpenHelper {
   private static final String DATABASE_NAME = "STUDENT_DATABASE.db";
@@ -80,8 +81,8 @@ public final class StudentDatabase extends SQLiteOpenHelper {
     return student;
   }
 
-  public LinkedList<Student> getStudentList() {
-    LinkedList<Student> studentList = new LinkedList<>();
+  public List<Student> getStudentList() {
+    List<Student> studentList = new LinkedList<>();
     Cursor cursor = getReadableDatabase().rawQuery(
       "SELECT * FROM " + TABLE_NAME + ";", null);
     if (cursor != null) {
