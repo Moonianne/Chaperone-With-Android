@@ -27,6 +27,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -49,11 +51,16 @@ public final class TripInputFragment extends Fragment
   private TextView endTime;
   private MaterialButton doneButton;
   private ObservableTransformer<Integer, TimePickerFragment> timeViewIdToFragment =
-    timeViewIds -> timeViewIds
-      .observeOn(Schedulers.io())
-      .debounce(DEBOUNCE, TimeUnit.MILLISECONDS)
-      .map(this::getTimePicker)
-      .doOnNext(timePickerFragment -> timePickerFragment.setOnTimePickListener(TripInputFragment.this));
+    new ObservableTransformer<Integer, TimePickerFragment>() {
+      @Override
+      public ObservableSource<TimePickerFragment> apply(Observable<Integer> timeViewIds) {
+        return timeViewIds
+          .observeOn(Schedulers.io())
+          .debounce(DEBOUNCE, TimeUnit.MILLISECONDS)
+          .map(TripInputFragment.this::getTimePicker)
+          .doOnNext(timePickerFragment -> timePickerFragment.setOnTimePickListener(TripInputFragment.this));
+      }
+    };
 
   public static TripInputFragment newInstance() {
     return new TripInputFragment();
