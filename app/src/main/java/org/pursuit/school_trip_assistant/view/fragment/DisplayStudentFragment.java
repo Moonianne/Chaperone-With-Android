@@ -71,8 +71,9 @@ public final class DisplayStudentFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
+    public void onDetach() {
         disposable.dispose();
-        super.onDestroy();
+        onFragmentInteractionListener = null;
+        super.onDetach();
     }
 }
