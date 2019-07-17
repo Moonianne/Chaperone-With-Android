@@ -25,6 +25,7 @@ public final class DisplayStudentFragment extends Fragment {
     private static final String ID_KEY = "Display.ID";
 
     private OnFragmentInteractionListener onFragmentInteractionListener;
+    private Disposable disposable;
 
     public static DisplayStudentFragment newInstance(int iD) {
         DisplayStudentFragment displayStudentFragment = new DisplayStudentFragment();
@@ -56,14 +57,22 @@ public final class DisplayStudentFragment extends Fragment {
 
         int iD = getArguments().getInt(ID_KEY);
         MaterialButton materialButton = view.findViewById(R.id.edit_button);
-        Disposable disposable = RxView.clicks(materialButton)
+        disposable = RxView.clicks(materialButton)
           .subscribe(click -> onFragmentInteractionListener.editStudent(iD));
-        view.<TextView>findViewById(R.id.display_text_name).setText(getString(R.string.student_name,
-          onFragmentInteractionListener.getStudentFullName(iD)));
-        view.<TextView>findViewById(R.id.display_e_phone).setText(getString(R.string.emergency_contact,
-          onFragmentInteractionListener.getEmergencyContact(iD)));
+        view.<TextView>findViewById(R.id.display_text_name)
+          .setText(getString(R.string.student_name,
+            onFragmentInteractionListener.getStudentFullName(iD)));
+        view.<TextView>findViewById(R.id.display_e_phone)
+          .setText(getString(R.string.emergency_contact,
+            onFragmentInteractionListener.getEmergencyContact(iD)));
         Picasso.get()
           .load(onFragmentInteractionListener.getStudentImage(iD))
           .into(view.<ImageView>findViewById(R.id.display_image));
+    }
+
+    @Override
+    public void onDestroy() {
+        disposable.dispose();
+        super.onDestroy();
     }
 }
