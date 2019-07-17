@@ -217,6 +217,16 @@ public final class HostActivity extends AppCompatActivity
     inflateFragment(InputStudentFragment.newInstance(student), false);
   }
 
+  @Override
+  public void scheduleDataDeletion() {
+    long currentTimeMillis = System.currentTimeMillis();
+    Log.d(TAG, "scheduleDataDeletion: " + (tripViewModel.getTripEndTimeInMillis() - currentTimeMillis));
+    WorkManager.getInstance().enqueue(new OneTimeWorkRequest.Builder(DeletionWorker.class)
+      .setInitialDelay(
+        (tripViewModel.getTripEndTimeInMillis() - currentTimeMillis), TimeUnit.MILLISECONDS)
+      .build());
+  }
+
   private void inflateFragment(Fragment fragment) {
     inflateFragment(fragment, false);
   }
@@ -227,16 +237,6 @@ public final class HostActivity extends AppCompatActivity
       .replace(R.id.fragment_container, fragment);
     if (isBackStack) fragmentTransaction.addToBackStack(null);
     fragmentTransaction.commit();
-  }
-
-  @Override
-  public void scheduleDataDeletion() {
-    long currentTimeMillis = System.currentTimeMillis();
-    Log.d(TAG, "scheduleDataDeletion: " + (tripViewModel.getTripEndTimeInMillis() - currentTimeMillis));
-    WorkManager.getInstance().enqueue(new OneTimeWorkRequest.Builder(DeletionWorker.class)
-      .setInitialDelay(
-        (tripViewModel.getTripEndTimeInMillis() - currentTimeMillis), TimeUnit.MILLISECONDS)
-      .build());
   }
 
   public AlertDialog getAboutDialog() {

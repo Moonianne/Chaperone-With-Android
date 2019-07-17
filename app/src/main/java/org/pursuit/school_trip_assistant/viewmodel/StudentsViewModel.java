@@ -17,9 +17,9 @@ import io.reactivex.Completable;
 public final class StudentsViewModel extends ViewModel {
   private final StudentDatabase studentDatabase;
 
-  MutableLiveData<List<Student>> studentList = new MutableLiveData<>();
+  private MutableLiveData<List<Student>> studentList = new MutableLiveData<>();
 
-  public StudentsViewModel(Context context) {
+  StudentsViewModel(Context context) {
     this.studentDatabase = StudentDatabase.getInstance(context);
     getStudentsFromDatabase();
   }
@@ -31,8 +31,8 @@ public final class StudentsViewModel extends ViewModel {
     });
   }
 
-  public boolean deleteStudentFromDatabase(String iD) {
-    return studentDatabase.deleteStudent(iD);
+  public void deleteStudentFromDatabase(String iD) {
+    studentDatabase.deleteStudent(iD);
   }
 
   public Student getStudent(int iD) {
@@ -52,7 +52,7 @@ public final class StudentsViewModel extends ViewModel {
     return getStudent(iD).image;
   }
 
-  public void getStudentsFromDatabase() {
+  private void getStudentsFromDatabase() {
     List<Student> students = studentDatabase.getStudentList();
     Collections.sort(students, Student.studentComparator);
     studentList.postValue(students);
